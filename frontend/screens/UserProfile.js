@@ -13,11 +13,18 @@ export default function UserProfile() {
   const [age, setAge] = useState('23');
   const [gender, setGender] = useState('male')
 
-  const data = [
-    {type: 'Name', info: name, set: setName},
-    {type: 'Age', info: age, set: setAge},
-    {type: 'Gender', info: gender, set: setGender}
-  ];
+  const data = 
+  fetch(`http://192.168.10.195:3000/users`)
+    .then((response) => response.json())
+      .then((data) => { console.log(data) })
+  
+
+
+
+  //   {type: 'Name', info: name, set: setName},
+  //   {type: 'Age', info: age, set: setAge},
+  //   {type: 'Gender', info: gender, set: setGender}
+  // ];
 
   let editColor = 'gold';
 
