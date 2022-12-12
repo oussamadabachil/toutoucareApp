@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './screens/UserProfile';
 import DogProfile from './screens/DogProfile';
 
-export default function Profiles() {
+export default function ProfilScreen() {
   return (
     <View style={styles.container}>
       <Text>Profiles</Text>
