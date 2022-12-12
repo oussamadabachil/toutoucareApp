@@ -1,10 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import UserProfile from './screens/UserProfile';
+import DogProfile from './screens/DogProfile';
 
-export default function App() {
+export default function Profiles() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Profiles</Text>
+      <DogProfile/>
+
+      <UserProfile/>
       <StatusBar style="auto" />
     </View>
   );
@@ -13,7 +18,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#red',
+    backgroundColor: '#blue',
     alignItems: 'center',
     justifyContent: 'center',
   },
