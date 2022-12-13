@@ -5,6 +5,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/LoginScreen";
+import InvoicesScreen from "./screens/InvoicesScreen";
+import MessageScreen from "./screens/MessageScreen";
+import BookingScreen from "./screens/BookingScreen";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
@@ -26,14 +30,14 @@ const TabNavigator = () => {
           if (route.name === "Home") {
             iconName = "house";
           } else if (route.name === "Invoices") {
-            iconName = "folder";
+            iconName = "fa-regular fa-folder";
           }
           else if 
             (route.name === "Booking") {
-              iconName = "calendar-minus";
+              iconName = "fa-solid fa-calendar-minus";
           }
           else if(route.name === "Messages") {
-            iconName = "comment-dots";
+            iconName = "fa-regular fa-comment-dots";
           }
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
@@ -45,7 +49,7 @@ const TabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Invoices" component={InvoicesScreen} />
       <Tab.Screen name="Booking" component={BookingScreen} />
-      <Tab.Screen name="Messages" component={MessagesScreen} />
+      <Tab.Screen name="Messages" component={MessageScreen} />
     </Tab.Navigator>
   );
 };
