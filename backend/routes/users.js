@@ -7,7 +7,6 @@ router.get("/", function (req, res, next) {
 });
 
 require("../models/connection");
-const Test = require("../models/tests");
 const User = require("../models/users");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
@@ -56,7 +55,7 @@ router.get("/all", (req, res) => {
   User.find({}).then((data) => {
     if (data) {
       res.json({
-        data: User,
+        data
       });
     }
   });
@@ -70,7 +69,7 @@ router.post("/signin", (req, res) => {
 
   User.findOne({ email: req.body.email }).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-    //if (data && req.body.password == data.password) {
+      //if (data && req.body.password == data.password) {
       res.json({ result: true, token: data.token });
     } else {
       res.json({ result: false, error: "User not found or wrong password" });
@@ -88,26 +87,5 @@ router.post("/signin", (req, res) => {
   });
 });*/
 
-router.post("/test", (req, res) => {
-  const newTest = new Test({
-    username: req.body.username,
-    name: req.body.name,
-  });
 
-  newTest.save().then(() => {
-    res.json({
-      data: newTest,
-    });
-  });
-});
-
-router.get("/allTest", (req, res) => {
-  Test.find({}).then((data) => {
-    if (data) {
-      res.json({
-        data: data,
-      });
-    }
-  });
-});
 module.exports = router;

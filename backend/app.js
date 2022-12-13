@@ -1,10 +1,13 @@
 var express = require("express");
 var path = require("path");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
+
 require("./models/connection");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-var indexRouter = require("../../../../TTC saved/backend/routes/index");
+var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
