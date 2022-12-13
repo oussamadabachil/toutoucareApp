@@ -9,25 +9,44 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getEmail } from "../reducers/user";
+import user, { login } from "../reducers/user";
+import { useRouter } from "next/router";
 
-export default function HomeScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
+
+  const router = useRouter();
+  if (user.token) {
+    router.push("/");
+  }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code_creche, setCode_creche] = useState("");
 
   const handleSubmit = () => {
-    useEffect(() => {
-      fetch("exp://192.168.10.134:19000/users/signin")
+    //useEffect(() => {
+    fetch("http://192.168.10.134:3000/users/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, code_creche })
         .then((response) => response.json())
         .then((data) => {
-          setUsers(data);
-        });
-      dispatch(getEmail(email));
-      navigation.navigate("TabNavigator");
-    }, []);
+          if (data.result) {
+            navigation.navigate("TabNavigator");
+            setEmail(data);
+            dispatch(
+              login({
+                token: data.token,
+                email: data.email,
+                password: data.password,
+                code_creche: data.code_creche,
+              })
+            );
+          }
+          // console.log(data);
+        }, []),
+    });
   };
 
   return (
@@ -35,11 +54,9 @@ export default function HomeScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-
       <Text style={styles.field}>Votre adresse email</Text>
 
       <TextInput
-        placeholder="Nickname"
         onChangeText={(value) => setEmail(value)}
         value={email}
         style={styles.input}
@@ -47,7 +64,6 @@ export default function HomeScreen({ navigation }) {
 
       <Text style={styles.field}>Votre mot de passe</Text>
       <TextInput
-        placeholder="Nickname"
         onChangeText={(value) => setPassword(value)}
         value={password}
         style={styles.input}
@@ -55,7 +71,6 @@ export default function HomeScreen({ navigation }) {
 
       <Text style={styles.field}>Votre code crèche</Text>
       <TextInput
-        placeholder="Nickname"
         onChangeText={(value) => setCode_creche(value)}
         value={code_creche}
         style={styles.input}
