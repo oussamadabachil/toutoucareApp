@@ -1,10 +1,6 @@
 var express = require("express");
 var router = express.Router();
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
 
 require("../models/connection");
 const User = require("../models/users");
@@ -57,6 +53,18 @@ router.get("/all", (req, res) => {
       res.json({
         data
       });
+    }
+  });
+});
+
+router.get("/all/:nom", (req, res) => {
+  User.findOne({
+    nom: { $regex: new RegExp(req.params.nom, "i") },
+  }).then(data => {
+    if (data) {
+      res.json({ result: true, user: data });
+    } else {
+      res.json({ result: false, error: "User not found" });
     }
   });
 });
