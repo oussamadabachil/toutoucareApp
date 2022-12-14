@@ -2,29 +2,42 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 
+
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare'
 
 export default function UserProfile() {
 
   const [editView, setEditView] = useState(false)
+  const user = useSelector((state) => state.user.value);
 
-  const [name, setName] = useState('Louis');
-  const [age, setAge] = useState('23');
-  const [gender, setGender] = useState('male')
+  // const [name, setName] = useState('Louis');
+  // const [age, setAge] = useState('23');
+  // const [gender, setGender] = useState('male')
 
-  const data = 
-  fetch(`http://192.168.10.195:3000/users`)
-    .then((response) => response.json())
-      .then((data) => { console.log(data) })
-  
-
-
+  // const data = 
+  // fetch(`http://192.168.10.195:3000/users`)
+  //   .then((response) => response.json())
+  //     .then((data) => { console.log(data) })
 
   //   {type: 'Name', info: name, set: setName},
   //   {type: 'Age', info: age, set: setAge},
   //   {type: 'Gender', info: gender, set: setGender}
   // ];
+
+  const [userInfos, setUserInfos] = useState([]);
+  
+    useEffect(() => {
+      if (!user.token) {
+        return;
+      }
+      fetch(`http://192.168.10.195:3000/users/all/${user.nom}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.result) { setUserInfos(data)}
+        });
+    }, []);
+
 
   let editColor = 'gold';
 
@@ -38,7 +51,7 @@ export default function UserProfile() {
     </TouchableOpacity>
   )
 
-  let infoText = data.map((data, i) => {
+  let infoText = userInfos.map((data, i) => {
     return (
       <View key={i} style={styles.infoModify}>
         <Text style={styles.text}>{data.type}:</Text>

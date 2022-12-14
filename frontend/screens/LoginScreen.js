@@ -9,16 +9,12 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import user, { login } from "../reducers/user";
-import { useRouter } from "next/router";
+import user from "../reducers/user";
+
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const router = useRouter();
-  if (user.token) {
-    router.push("/");
-  }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
