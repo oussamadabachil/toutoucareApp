@@ -9,44 +9,59 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import user, { login } from "../reducers/user";
-import { useRouter } from "next/router";
+import { login, logout } from "../reducers/user";
+import { Checkbox } from "react-native-paper";
+import * as React from "react";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const router = useRouter();
-  if (user.token) {
-    router.push("/");
-  }
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code_creche, setCode_creche] = useState("");
+  const [checked, setChecked] = React.useState(false);
 
-  const handleSubmit = () => {
-    //useEffect(() => {
-    fetch("http://192.168.10.134:3000/users/signin", {
+  // const handleSubmit = () => {
+  //   //useEffect(() => {
+  //   fetch("http://192.168.10.134:3000/users/signin", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ email, password, code_creche })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data.result) {
+  //           navigation.navigate("TabNavigator");
+  //           dispatch(
+  //             login({
+  //               token: data.token,
+  //               email: data.email,
+  //               password: data.password,
+  //               code_creche: data.code_creche,
+  //             })
+  //           );
+  //         }
+  //         // console.log(data);
+  //       }, []),
+  //   });
+  // };
+
+  const connexion = () => {
+    fetch("http://192.168.10.129:3000/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, code_creche })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.result) {
-            navigation.navigate("TabNavigator");
-            setEmail(data);
-            dispatch(
-              login({
-                token: data.token,
-                email: data.email,
-                password: data.password,
-                code_creche: data.code_creche,
-              })
-            );
-          }
-          // console.log(data);
-        }, []),
-    });
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        code_creche: "1234",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          navigation.navigate("TabNavigator", { screen: "Home" });
+        }
+      });
   };
 
   return (
@@ -64,8 +79,13 @@ export default function LoginScreen({ navigation }) {
 
       <Text style={styles.field}>Votre mot de passe</Text>
       <TextInput
+        autoCapitalize="none"
+        autoCorrect={false}
+        textContentType="newPassword"
+        secureTextEntry
         onChangeText={(value) => setPassword(value)}
         value={password}
+        enablesReturnKeyAutomatically
         style={styles.input}
       />
 
@@ -75,8 +95,17 @@ export default function LoginScreen({ navigation }) {
         value={code_creche}
         style={styles.input}
       />
+
+      <Checkbox
+        status={checked ? "checked" : "unchecked"}
+        onPress={() => {
+          setChecked(!checked);
+        }}
+      />
+      <Text>Restez connecté</Text>
+
       <TouchableOpacity
-        onPress={() => handleSubmit()}
+        onPress={() => connexion()}
         style={styles.button}
         activeOpacity={0.8}
       >
@@ -103,26 +132,33 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   input: {
-    width: "80%",
-    marginTop: 25,
-    borderBottomColor: "#ec6e5b",
-    borderBottomWidth: 1,
-    fontSize: 18,
+    //width: "80%",
+    //marginTop: 25,
+    //borderBottomColor: "#ec6e5b",
+    //borderBottomWidth: 1,
+    //fontSize: 18,
+    backgroundColor: "white",
+    width: "50%",
+    borderRadius: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   button: {
     alignItems: "center",
     paddingTop: 8,
-    width: "80%",
+    width: "70%",
     marginTop: 30,
     backgroundColor: "#008486",
     borderRadius: 10,
-    marginBottom: 80,
+    marginBottom: 10,
   },
   textButton: {
     color: "#ffffff",
     height: 30,
     fontWeight: "900",
-    fontSize: 16,
+    fontSize: 17,
   },
   field: {
     width: "80%",
