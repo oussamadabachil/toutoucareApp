@@ -10,59 +10,36 @@ import {
   View,
   TextInput,
 } from "react-native";
+import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
-// import FontAwesomeIcon from "@fortawesome/react-native-fontawesome";
-// import { faPenToSquare } from "@fortawesome/free-solid-svg-icons/faPenToSquare";
 
 export default function UserProfile() {
 
-  const [name, setName] = useState("Louis");
-  const [age, setAge] = useState("23");
-  const [gender, setGender] = useState("male");
-
-  const data = 
-  fetch(`http://192.168.10.195:3000/users`)
-    .then((response) => response.json())
-      .then((data) => { console.log(data) })
-  
-
 
   const [editView, setEditView] = useState(false)
+  const [editColor, setEditcolor] = useState('gold')
   const user = useSelector((state) => state.user.value);
-
-  // const [name, setName] = useState('Louis');
-  // const [age, setAge] = useState('23');
-  // const [gender, setGender] = useState('male')
-
-  // const data = 
-  // fetch(`http://192.168.10.195:3000/users`)
-  //   .then((response) => response.json())
-  //     .then((data) => { console.log(data) })
-
-  //   {type: 'Name', info: name, set: setName},
-  //   {type: 'Age', info: age, set: setAge},
-  //   {type: 'Gender', info: gender, set: setGender}
-  // ];
 
   const [userInfos, setUserInfos] = useState([]);
   
     useEffect(() => {
-      if (!user.token) {
+
+      if (!user.data.nom) {
         return;
       }
-      fetch(`http://192.168.10.195:3000/users/all/${user.nom}`)
+      fetch(`http://192.168.10.167:3000/users/all/${user.data.nom}`)
         .then(response => response.json())
         .then(data => {
-            if (data.result) { setUserInfos(data)}
+            if (data.result) {setUserInfos(data.user)};
         });
     }, []);
-
-
-
-  let editColor = 'gold';
+    console.log(userInfos);
 
   const handleModifyBouton = () => {
     setEditView(true);
+    setEditcolor('black');
   };
 
   let modifyBouton = (
@@ -75,27 +52,69 @@ export default function UserProfile() {
     </TouchableOpacity>
   );
 
-  let infoText = userInfos.map((data, i) => {
-    return (
-      <View key={i} style={styles.infoModify}>
-        <Text style={styles.text}>{data.type}:</Text>
-        <TextInput
-          style={styles.text}
-          editable={editView}
-          onChangeText={data.set}
-          value={data.info}
-        />
-        {/* <FontAwesomeIcon
-          icon={faPenToSquare}
-          color={editColor}
-          onPress={() => handleModifier()}
-        /> */}
+  let infoText =
+      <View style={styles.background}>
+      <View style={styles.infoModify}>
+        <Text style={styles.text}>Nom: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.nom}/>
+        < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
       </View>
-    );
-  });
+      <View style={styles.infoModify}>
+          <Text style={styles.text}>Prénom: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.prenom}/>
+       < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+        </View>
+        <View style={styles.infoModify}>
+        <Text style={styles.text}>mon Toutou: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.chien}/>
+        < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+      </View>
+      <View style={styles.infoModify}>
+          <Text style={styles.text}>Date de naissance: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.date_de_naissance}/>
+       < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+        </View>
+        <View style={styles.infoModify}>
+          <Text style={styles.text}>Tél: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.telephone}/>
+       < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+        </View>
+        <View style={styles.infoModify}>
+        <Text style={styles.text}>Email: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.email}/>
+        < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+      </View>
+      <View style={styles.infoModify}>
+          <Text style={styles.text}>Mot de passe: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.password} secureTextEntry={true}/>
+       < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+        </View>
+        <View style={styles.infoModify}>
+          <Text style={styles.text}>Adresse: </Text>
+        <TextInput style={styles.text} editable={editView} multiline={true} defaultValue={userInfos.rue}/>
+         <TextInput style={styles.text} editable={editView} multiline={true} defaultValue={userInfos.code_postal} />
+         <TextInput style={styles.text} editable={editView} multiline={true} defaultValue= {userInfos.ville}/>
+       < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+        </View>
+        <View style={styles.infoModify}>
+        <Text style={styles.text}>Profession: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.profession}/>
+        < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+      </View>
+      <View style={styles.infoModify}>
+        <Text style={styles.text}>Personne à contacter en cas d'urgence: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.nom_contact_urgence}/>
+        < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+      </View>
+      <View style={styles.infoModify}>
+        <Text style={styles.text}>Tél: </Text>
+        <TextInput style={styles.text} editable={editView} defaultValue={userInfos.tel_contact_urgence}/>
+        < FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifyBouton()}/>
+      </View>
+      </View>
+
 
   if (editView) {
-    editColor = "black";
     modifyBouton = (
       <View>
         <TouchableOpacity
@@ -118,6 +137,7 @@ export default function UserProfile() {
 
   const handleAccept = () => {
     setEditView(false);
+    setEditcolor('gold');
   };
 
   return (
@@ -150,6 +170,8 @@ const styles = StyleSheet.create({
   },
   infoModify: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 40,
   },
   textInput: {

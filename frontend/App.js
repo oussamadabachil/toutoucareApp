@@ -25,23 +25,23 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
+        // tabBarIcon: ({ color, size }) => {
+        //   let iconName = "";
 
-          if (route.name === "Home") {
-            iconName = "house";
-          } else if (route.name === "Invoices") {
-            iconName = "fa-regular fa-folder";
-          }
-          else if 
-            (route.name === "Booking") {
-              iconName = "fa-solid fa-calendar-minus";
-          }
-          else if(route.name === "Messages") {
-            iconName = "fa-regular fa-comment-dots";
-          }
-          return <FontAwesome name={iconName} size={size} color={color} />;
-        },
+        //   if (route.name === "Home") {
+        //     iconName = "house";
+        //   } else if (route.name === "Invoices") {
+        //     iconName = "fa-regular fa-folder";
+        //   }
+        //   else if 
+        //     (route.name === "Booking") {
+        //       iconName = "fa-solid fa-calendar-minus";
+        //   }
+        //   else if(route.name === "Messages") {
+        //     iconName = "fa-regular fa-comment-dots";
+        //   }
+        //   return <FontAwesome name={iconName} size={size} color={color} />;
+        // },
         tabBarActiveTintColor: "#ec6e5b",
         tabBarInactiveTintColor: "#335561",
         headerShown: false,
