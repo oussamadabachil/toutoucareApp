@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import {Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 
 import { collectData } from "../reducers/user";
@@ -31,37 +22,12 @@ export default function LoginScreen({ navigation }) {
   const regexMail = /^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}.[a-z]{2,4}$/;
 
   let textVerifMail= ""
-  if(email.match(regexMail)){
+  if(!email && email.match(regexMail)){
   }else{
     
-    textVerifMail="Votre adresse mail n'est pas valide"
+    textVerifMail="Votre adresse email n'est pas valide"
 
   }
-
-
-  // const handleSubmit = () => {
-  //   //useEffect(() => {
-  //   fetch("http://192.168.10.134:3000/users/signin", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email, password, code_creche })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         if (data.result) {
-  //           navigation.navigate("TabNavigator");
-  //           dispatch(
-  //             login({
-  //               token: data.token,
-  //               email: data.email,
-  //               password: data.password,
-  //               code_creche: data.code_creche,
-  //             })
-  //           );
-  //         }
-  //         // console.log(data);
-  //       }, []),
-  //   });
-  // };
 
   const connexion = () => {
 
