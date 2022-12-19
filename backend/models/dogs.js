@@ -13,7 +13,7 @@ const dogSchema = mongoose.Schema({
     entente_enfants: String,
     habitudes: String,
     peurs: String,
-    userToken: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    userToken: { type: mongoose.Schema.Types.String, ref: 'users' },
   })
 
 

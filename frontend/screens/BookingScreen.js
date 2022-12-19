@@ -61,7 +61,7 @@ export default function BookingScreen() {
   const array = [];
   const arrayB = [];
 
-  const ip = "192.168.10.180";
+  const ip = "192.168.10.170";
 
   const hoursA = [
     "09:00",

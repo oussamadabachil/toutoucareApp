@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const db = require('../database/users');
-
+const db = require("../database/users");
 
 require("../models/connection");
 var router = express.Router();
@@ -12,8 +11,9 @@ const Booking = require("../models/booking");
 const Dog = require("../models/dogs");
 const bcrypt = require("bcrypt");
 
-
 // Création de la DB dans Mongoose
+
+/*
 router.post("/all", (req, res) => {
  db.map(async(data) => {
 
@@ -79,7 +79,7 @@ router.post("/all", (req, res) => {
 //   // Check if the user has not already been registered
 //   User.findOne({ email: req.body.email }).then((data) => {
 //     if (data === null) {
-      
+
 //       });
 
 //       newUser.save().then((newDoc) => {
@@ -97,7 +97,6 @@ router.post("/signin", (req, res) => {
     res.json({ result: false, error: "Veuillez remplir tous les champs" });
     return;
   }
-
   User.findOne({ email: req.body.email }).then((data) => {
     if (
       data &&
@@ -126,7 +125,10 @@ router.get("/all", (req, res) => {
   });
 });
 
-router.get("/all/:email", (req, res) => {
+
+
+
+router.get("/all/:nom", (req, res) => {
   User.findOne({
     email: { $regex: new RegExp(req.params.email, "i") },
   }).then(data => {
@@ -240,8 +242,7 @@ router.get("/booking/info/:token/:date", (req, res) => {
       }
     }
   );
-
-})
+});
 /*
 
 router.post("/add/:idUser/:idDog", (req, res) => {
@@ -284,14 +285,12 @@ router.get("/allBookingPerUser/:token", (req, res) => {
 //route qui permet d'afficher que les dates de réservation
 
 router.get("/allBookingDuplicate", (req, res) => {
-  
-    Booking.find({}).then((data) => {
-        if (data) {
-          res.json({ data: data });
-        } else {
-          res.json({ error:"no data"});
-        }
-      
+  Booking.find({}).then((data) => {
+    if (data) {
+      res.json({ data: data });
+    } else {
+      res.json({ error: "no data" });
+    }
   });
 });
 
@@ -315,6 +314,32 @@ router.get("/count/:date", (req, res) => {
 // });
 
 
+router.get("/all/:nom", (req, res) => {
+  User.findOne({
+    nom: { $regex: new RegExp(req.params.nom, "i") },
+  }).then((data) => {
+    if (data) {
+      res.json({ result: true, user: data });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});
+
+router.post("/signin", (req, res) => {
+  if (!checkBody(req.body, ["email", "password"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  User.findOne({ email: req.body.email }).then((data) => {
+    if (data && bcrypt.compareSync(req.body.password, data.password)) {
+      //if (data && req.body.password == data.password) {
+      res.json({ result: true, data });
+    } else {
+      res.json({ result: false, error: "User not found or wrong password" });
+    }
+  });
+});
 // router.post("/signin", (req, res) => {
 //   if (!checkBody(req.body, ["email", "password"])) {
 //     res.json({ result: false, error: "Missing or empty fields" });
@@ -354,4 +379,29 @@ router.delete("/delete/:idUser/:date/", (req, res) => {
   });
 });
 
+/*router.delete("/delete/:idUser/:date/:idDog", (req, res) => {
+  Booking.deleteOne({
+    user: req.params.idUser,
+    date: req.params.date,
+    dog: req.params.idDog,
+  }).then((data) => {
+    if (data) {
+      res.json({ data: data, result: true });
+    }
+  });
+}); */
+/*router.get("/code_creche/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data) {
+      res.json({ result: true, codeCreche: data.codeCreche });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});*/
+
+//faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
+
 module.exports = router;
+
+//ro
