@@ -25,7 +25,7 @@ import { login, logout } from "../reducers/user";
 import * as React from "react";
 import { CheckBox } from 'react-native-elements'
 
-const BACKEND_ADDRESS = 'http://192.168.10.164';
+const BACKEND_ADDRESS = 'http://192.168.10.180';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
