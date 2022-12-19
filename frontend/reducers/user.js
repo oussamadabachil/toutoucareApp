@@ -28,8 +28,11 @@ export const userSlice = createSlice({
       state.value.password = null;
       state.value.code_creche = null;
     },
+    modify: (state, action) => {
+      state.value=action.payload
+    }
   },
 });
 
-export const { login, logout ,collectData} = userSlice.actions;
+export const { login, logout, collectData, modify} = userSlice.actions;
 export default userSlice.reducer;

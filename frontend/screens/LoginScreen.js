@@ -30,12 +30,12 @@ export default function LoginScreen({ navigation }) {
 
   const regexMail = /^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}.[a-z]{2,4}$/;
 
-  let textVerifMail= ""
-  if(email.match(regexMail)){
-  }else{
-    
-    textVerifMail="Votre adresse mail n'est pas valide"
+  let textVerifMail;
 
+  if (email.length > 5 && !email.match(regexMail)) {
+    textVerifMail = "Votre adresse mail n'est pas valide";
+  } else if (email.match(regexMail)) {
+    textVerifMail = "";
   }
 
 
@@ -65,7 +65,7 @@ export default function LoginScreen({ navigation }) {
 
   const connexion = () => {
 
-    fetch("http://192.168.10.167:3000/users/signin", {
+    fetch("http://192.168.10.182:3000/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -76,7 +76,7 @@ export default function LoginScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         dispatch(collectData(data))
         if (data.result) {
           // console.log(data)
@@ -103,7 +103,7 @@ export default function LoginScreen({ navigation }) {
       onChangeText={(value) => setEmail(value)}
       value={email}
       style={styles.input}
-      placeholder="Insérer votre adresse-mail"
+      placeholder="mail"
 
     />
   </View>
@@ -114,7 +114,7 @@ export default function LoginScreen({ navigation }) {
       autoCorrect={false}
       textContentType="newPassword"
       secureTextEntry
-      placeholder="Insérer votre mot de passe"
+      placeholder="mot de passe"
       onChangeText={(value) => setPassword(value)}
       value={password}
       enablesReturnKeyAutomatically
@@ -126,7 +126,7 @@ export default function LoginScreen({ navigation }) {
     <TextInput
       onChangeText={(value) => setCode_creche(value)}
       value={codeCreche}
-      placeholder="Insérer votre code crèche"
+      placeholder="code"
       style={styles.inputCreche}
     />
   </View>
@@ -178,7 +178,7 @@ color:'red'
   containerInput: {
     width: "90%",
     marginRight: "auto",
-    marginLeft: "auto",
+    marginLeft: 5,
   },
   image: {
     width: "100%",
@@ -218,8 +218,7 @@ color:'red'
     //borderBottomWidth: 1,
     //fontSize: 18,
     backgroundColor: "white",
-    width: 300,
-    height: 40,
+    width: 80,
     borderRadius: 6,
     alignItems: "center",
     borderWidth: 1,
