@@ -126,9 +126,11 @@ router.get("/all", (req, res) => {
 
 
 
+*/
 
 router.get("/all/:email", (req, res) => {
   User.findOne({
+
     email: { $regex: new RegExp(req.params.email, "i") },
   }).then(data => {
     if (data) {
@@ -313,17 +315,19 @@ router.get("/count/:date", (req, res) => {
 // });
 
 
-// router.get("/all/:nom", (req, res) => {
-//   User.findOne({
-//     nom: { $regex: new RegExp(req.params.nom, "i") },
-//   }).then((data) => {
-//     if (data) {
-//       res.json({ result: true, user: data });
-//     } else {
-//       res.json({ result: false, error: "User not found" });
-//     }
-//   });
-// });
+
+router.get("/all/:email", (req, res) => {
+  User.findOne({
+    email: { $regex: new RegExp(req.params.email, "i") },
+  }).then((data) => {
+    if (data) {
+      res.json({ result: true, user: data });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});
+
 
 // router.post("/signin", (req, res) => {
 //   if (!checkBody(req.body, ["email", "password"])) {
