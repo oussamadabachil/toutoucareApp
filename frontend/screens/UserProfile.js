@@ -85,7 +85,7 @@ export default function UserProfile() {
   }
 
   const handleModificationProfil = () => {
-    fetch(`http://192.168.10.182:3000/users/modify/${user.data.email}`, {
+    fetch(`${BACKEND_ADDRESS}:3000/users/modify/${user.data.email}`, {
       method: "PUT",
       headers: {
         Accept: 'application/json',
