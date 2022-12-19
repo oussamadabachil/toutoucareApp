@@ -11,12 +11,18 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { addIduser } from '../reducers/user';
+import { useDispatch } from "react-redux";
+
+import { collectData } from "../reducers/user";
+// import { addIduser } from '../reducers/user';
 
 import { useEffect } from "react";
 import { login, logout } from "../reducers/user";
 
 import * as React from "react";
 import { CheckBox } from 'react-native-elements'
+
+const BACKEND_ADDRESS = 'http://192.168.10.164';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -64,9 +70,11 @@ export default function LoginScreen({ navigation }) {
   //   });
   // };
 
+ 
+  
   const connexion = () => {
-    
-    fetch("http://192.168.10.170:3000/users/signin", {
+
+    fetch(`${BACKEND_ADDRESS}:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -77,7 +85,8 @@ export default function LoginScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
+        dispatch(collectData(data))
         if (data.result) {
           console.log(data.id)
           dispatch(addIduser(data.id));

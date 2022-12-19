@@ -6,19 +6,21 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
   View,
   Button,
 } from "react-native";
 
+
 export default function HomeScreen({ navigation }) {
   return (
-    <View>
+    <SafeAreaView style= {styles.container}>
       <Text>Home Screen</Text>
       <Button
         title="Go to User Profile"
         onPress={() => navigation.navigate("UserProfile")}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

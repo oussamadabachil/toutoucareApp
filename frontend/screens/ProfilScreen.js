@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './screens/UserProfile';
 import DogProfile from './screens/DogProfile';
