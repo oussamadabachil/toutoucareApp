@@ -5,14 +5,14 @@ const bookingSchema = mongoose.Schema({
     heureDeDepose: String,
     heureDeRecuperation: String,
     commentaire : String,
-    idUser: { type: mongoose.Schema.Types.ObjectId, ref: 'testusers' },
+    userToken: { type: mongoose.Schema.Types.String, ref: 'users' },
     // idDog : { type: mongoose.Schema.Types.ObjectId, ref: 'testdogs' },
 
 
 });
 
 
-const Booking = mongoose.model("testbookings", bookingSchema);
+const Booking = mongoose.model("bookings", bookingSchema);
 
 module.exports = Booking;
 //foreing key with poeple

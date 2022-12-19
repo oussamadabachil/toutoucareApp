@@ -13,9 +13,9 @@ const dogSchema = mongoose.Schema({
     entente_enfants: String,
     habitudes: String,
     peurs: String,
-    _idUser: { type: mongoose.Schema.Types.ObjectId, ref: 'testusers' },
+    userToken: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
   })
 
 
-  const Dog = mongoose.model("testdogs", dogSchema);
+  const Dog = mongoose.model("dogs", dogSchema);
   module.exports = Dog ;
