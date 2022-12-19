@@ -125,6 +125,9 @@ router.get("/all", (req, res) => {
   });
 });
 
+
+
+
 router.get("/all/:nom", (req, res) => {
   User.findOne({
     nom: { $regex: new RegExp(req.params.nom, "i") },
