@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //push
 import {
@@ -12,20 +12,15 @@ import {
   
   View,
 } from "react-native";
+
 import { useDispatch } from "react-redux";
-// import { addIduser } from '../reducers/user';
-// import { useDispatch } from "react-redux";
-
 import { collectData } from "../reducers/user";
-// import { addIduser } from '../reducers/user';
-
-import { useEffect } from "react";
 import { login, logout } from "../reducers/user";
 
 import * as React from "react";
 import { CheckBox } from 'react-native-elements'
 
-const BACKEND_ADDRESS = 'http://192.168.10.170';
+const BACKEND_ADDRESS = 'http://192.168.10.180';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -39,14 +34,13 @@ export default function LoginScreen({ navigation }) {
 
   const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
-  let textVerifMail= ""
-  if(email.match(regexMail)){
-  }else{
-    console.log("ko")
-    textVerifMail="Votre adresse mail n'est pas valide"
-
+  let textVerifMail;
+console.log("ko")
+  if (email.length > 5 && !email.match(regexMail)) {
+    textVerifMail = "Votre adresse mail n'est pas valide";
+  } else if (email.match(regexMail)) {
+    textVerifMail = "";
   }
-
 
   
   // const handleSubmit = () => {
@@ -88,11 +82,9 @@ export default function LoginScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
-        dispatch(collectData(data))
+        console.log(data);
         if (data.result) {
-          console.log(data.id)
-          dispatch(addIduser(data.id));
+          dispatch(collectData(data));
           navigation.navigate("TabNavigator", { screen: "Home" });
         }else{
           Alert.alert(data.error)
@@ -105,7 +97,6 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.containerForm}>
       <View style={styles.containerInput}>
         <Text style={styles.field}>Votre adresse email</Text>
 
@@ -159,7 +150,6 @@ export default function LoginScreen({ navigation }) {
       </TouchableOpacity>
       <Text style={styles.textVerifMail}>{textVerifMail}</Text>
 
-      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -192,7 +182,7 @@ const styles = StyleSheet.create({
   containerInput: {
     width: "90%",
     marginRight: "auto",
-    marginLeft: "auto",
+    marginLeft: 5,
   },
   image: {
     width: "100%",

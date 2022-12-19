@@ -14,9 +14,10 @@ const userSchema = mongoose.Schema({
   profession: String,
   nom_contact_urgence: String,
   tel_contact_urgence: String,
-  chien: { type: mongoose.Schema.Types.ObjectId, ref: 'testdogs' },
-  booking: { type: mongoose.Schema.Types.ObjectId, ref: 'testbookings' },
   token: String,
+
+  chien: { type: mongoose.Schema.Types.ObjectId, ref: 'dogs' },
+  booking: { type: mongoose.Schema.Types.ObjectId, ref: 'bookings' },
 });
 
 
