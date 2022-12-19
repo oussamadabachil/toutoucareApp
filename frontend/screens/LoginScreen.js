@@ -16,6 +16,7 @@ import * as React from "react";
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
+  //const [isModalVisible, setIsModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code_creche, setCode_creche] = useState("");
@@ -46,7 +47,7 @@ export default function LoginScreen({ navigation }) {
   // };
 
   const connexion = () => {
-    fetch("http://192.168.10.129:3000/users/signin", {
+    fetch("http://192.168.10.116:3000/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -60,6 +61,7 @@ export default function LoginScreen({ navigation }) {
         console.log(data);
         if (data.result) {
           navigation.navigate("TabNavigator", { screen: "Home" });
+          //setIsModalVisible(false)
         }
       });
   };

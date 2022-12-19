@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -13,13 +15,28 @@ import UserProfile from "./screens/UserProfile";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+//import { persistStore, persistReducer } from 'redux-persist';
+//import { PersistGate } from 'redux-persist/integration/react';
+//import { combineReducers } from '@reduxjs/toolkit';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const store = configureStore({
-  reducer: { user },
+  reducer : {user},
 });
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+//const reducers = combineReducers({ user });
+
+/*const store = configureStore({
+  reducer: persistReducer(persistConfig, reducers),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+});*/
+
+//const persistor = persistStore(store);
+
+//const persistConfig = { key: 'toutoucareApp', storage : AsyncStorage, blacklist: ['UserProfile'] };
 
 const TabNavigator = () => {
   return (
