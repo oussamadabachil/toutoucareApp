@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
   nom: String,
   prenom: String,
+  chien: String,
   date_de_naissance: String,
   telephone: String,
   email: String,
@@ -16,7 +17,7 @@ const userSchema = mongoose.Schema({
   tel_contact_urgence: String,
   token: String,
 
-  chien: { type: mongoose.Schema.Types.ObjectId, ref: 'dogs' },
+  // chien: { type: mongoose.Schema.Types.ObjectId, ref: 'dogs' },
   booking: { type: mongoose.Schema.Types.ObjectId, ref: 'bookings' },
 });
 
