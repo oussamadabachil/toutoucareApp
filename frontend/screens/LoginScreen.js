@@ -9,7 +9,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  
   View,
 } from "react-native";
 
@@ -18,31 +17,28 @@ import { collectData } from "../reducers/user";
 import { login, logout } from "../reducers/user";
 
 import * as React from "react";
-import { CheckBox } from 'react-native-elements'
+import { CheckBox } from "react-native-elements";
 
-const BACKEND_ADDRESS = 'http://192.168.10.180';
+const BACKEND_ADDRESS = "http://192.168.10.170";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
-
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codeCreche, setCode_creche] = useState("");
   const [checked, setChecked] = React.useState(false);
 
-
   const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
   let textVerifMail;
-    console.log("ko")
+  console.log("ko");
   if (email.length > 5 && !email.match(regexMail)) {
     textVerifMail = "Votre adresse mail n'est pas valide";
   } else if (email.match(regexMail)) {
     textVerifMail = "";
   }
 
-  
   // const handleSubmit = () => {
   //   //useEffect(() => {
   //   fetch("http://192.168.10.134:3000/users/signin", {
@@ -67,10 +63,7 @@ export default function LoginScreen({ navigation }) {
   //   });
   // };
 
- 
-  
   const connexion = () => {
-
     fetch(`${BACKEND_ADDRESS}:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,11 +75,11 @@ export default function LoginScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-          dispatch(collectData(data));
-          if (data.result) {
+        dispatch(collectData(data));
+        if (data.result) {
           navigation.navigate("TabNavigator", { screen: "Home" });
         } else {
-          Alert.alert(data.error)
+          Alert.alert(data.error);
         }
       });
   };
@@ -96,17 +89,16 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <View>
       <View style={styles.containerInput}>
         <Text style={styles.field}>Votre adresse email</Text>
 
         <TextInput
-                  autoCapitalize="none"
-
+          autoCapitalize="none"
           onChangeText={(value) => setEmail(value)}
           value={email}
           style={styles.input}
           placeholder="Adresse email"
-
         />
       </View>
       <View style={styles.containerInput}>
@@ -134,9 +126,7 @@ export default function LoginScreen({ navigation }) {
       </View>
 
       <View style={styles.containerCheckbox}>
-        <CheckBox
-        
-        ></CheckBox>
+        <CheckBox></CheckBox>
         <Text style={styles.textSC}>Restez connecté</Text>
       </View>
 
@@ -148,28 +138,25 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.textButton}>Se connecter</Text>
       </TouchableOpacity>
       <Text style={styles.textVerifMail}>{textVerifMail}</Text>
-
+      </View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  containerCheckbox:{
-    justifyContent:"center",
-    width:300,
-    flexDirection:"row",
-    alignItems:"center",
-
+  containerCheckbox: {
+    justifyContent: "center",
+    width: 300,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  checkStyle:{
+  checkStyle: {
     alignSelf: "center",
 
-    backgroundColor:"white",
+    backgroundColor: "white",
 
-    padding:122,
-    color:'red'
-
-
+    padding: 122,
+    color: "red",
   },
 
   container: {
@@ -187,12 +174,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "50%",
   },
-  textVerifMail:{
-    textAlign:"center",
-    color:"#F12054",
-    fontSize:17,
-    fontWeight:"bold",
-    marginTop:20
+  textVerifMail: {
+    textAlign: "center",
+    color: "#F12054",
+    fontSize: 17,
+    fontWeight: "bold",
+    marginTop: 20,
   },
   input: {
     marginVertical: 12,
@@ -226,7 +213,7 @@ const styles = StyleSheet.create({
 
   button: {
     width: 300,
-    marginTop:20,
+    marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -239,22 +226,17 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     paddingVertical: 10,
     paddingHorizontal: 20,
-  }
+  },
 
-
-
-
-
-    // alignItems: "center",
-    // paddingTop: 8,
-    // width: "70%",
-    // marginTop: 30,
-    // backgroundColor: "#008486",
-    // borderRadius: 10,
-    // marginBottom: 10,
-  ,
+  // alignItems: "center",
+  // paddingTop: 8,
+  // width: "70%",
+  // marginTop: 30,
+  // backgroundColor: "#008486",
+  // borderRadius: 10,
+  // marginBottom: 10,
   textButton: {
-    textAlign:"center",
+    textAlign: "center",
     color: "#fff",
     fontWeight: "bold",
 
@@ -265,8 +247,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "600",
   },
-  textSC:{
-    fontSize:17,
-    fontWeight:'700',
-  }
+  textSC: {
+    fontSize: 17,
+    fontWeight: "700",
+  },
 });
