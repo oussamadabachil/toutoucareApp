@@ -26,13 +26,15 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
 import UploadImage from './UploadImage';
 
-const BACKEND_ADDRESS = 'http://192.168.10.170';
+const BACKEND_ADDRESS = 'http://192.168.10.180';
 
 export default function UserProfile() {
 
   const dispatch = useDispatch();
   const [editView, setEditView] = useState(false)
+  const [userInfosBackup, setUserInfosBackup] = useState();
   const [editColor, setEditColor] = useState('white')
+  
 
   /*Check si le switch est actif ou non*/
   const [isEnabled, setIsEnabled] = useState(false);
@@ -42,8 +44,7 @@ export default function UserProfile() {
   const [userInfos, setUserInfos] = useState([]);
   
     useEffect(() => {
-        console.log(user.data.nom)
-      if (!user.data.nom) {
+      if (!user.data.email) {
         return;
       }
       fetch(`${BACKEND_ADDRESS}:3000/users/all/${user.data.email}`)
@@ -84,7 +85,7 @@ export default function UserProfile() {
   }
 
   const handleModificationProfil = () => {
-    fetch(`http://192.168.10.170:3000/users/modify/${user.data.email}`, {
+    fetch(`${BACKEND_ADDRESS}:3000/users/modify/${user.data.email}`, {
       method: "PUT",
       headers: {
         Accept: 'application/json',
@@ -113,6 +114,7 @@ export default function UserProfile() {
 
   const handleModifyBouton = () => {
     setEditView(true);
+    setUserInfosBackup(userInfos);
     console.log(userInfos)
   };
 
@@ -125,6 +127,7 @@ export default function UserProfile() {
 
   const handleCancel = () => {
     setEditView(false);
+    setUserInfos(userInfosBackup);
     setEditColor("white");
   }
 
