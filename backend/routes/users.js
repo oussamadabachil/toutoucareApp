@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const db = require('../database/users');
-
+const db = require("../database/users");
 
 require("../models/connection");
 var router = express.Router();
@@ -12,12 +11,9 @@ const Booking = require("../models/booking");
 const Dog = require("../models/dogs");
 const bcrypt = require("bcrypt");
 
-
-router.post("/signup", (req, res) => {
-  User.findOne({ email: req.body.email }).then((data) => {
-    if (data === null) {
-      const hash = bcrypt.hashSync(req.body.password, 10);
 // Création de la DB dans Mongoose
+
+/*
 router.post("/all", (req, res) => {
  db.map(async(data) => {
 
@@ -89,6 +85,8 @@ router.post("/all", (req, res) => {
   res.json({result : true}) 
 
 })
+
+*/
 // router.post("/signup", (req, res) => {
 //   if (!checkBody(req.body, ["email", "password"])) {
 //     res.json({ result: false, error: "Missing or empty fields" });
@@ -98,7 +96,7 @@ router.post("/all", (req, res) => {
 //   // Check if the user has not already been registered
 //   User.findOne({ email: req.body.email }).then((data) => {
 //     if (data === null) {
-      
+
 //       });
 
 //       newUser.save().then((newDoc) => {
@@ -116,7 +114,6 @@ router.post("/signin", (req, res) => {
     res.json({ result: false, error: "Veuillez remplir tous vos champs" });
     return;
   }
-
   User.findOne({ email: req.body.email }).then((data) => {
     if (
       data &&
@@ -175,22 +172,20 @@ router.put("/dataBooking/:idUser/:date", (req, res) => {
   });
 });
 
-
 router.get("/booking/info/:idUser/:date", (req, res) => {
   Booking.findOne({ idUser: req.params.idUser, date: req.params.date }).then(
     (data) => {
-
-
-      if(data === null){
-        res.json({ result: false, message: "Vous n'avez pas de réservation pour cette date" });
-      }else{
-      
-      res.json({ result: true, data: data });
+      if (data === null) {
+        res.json({
+          result: false,
+          message: "Vous n'avez pas de réservation pour cette date",
+        });
+      } else {
+        res.json({ result: true, data: data });
       }
     }
   );
-
-})
+});
 /*
 
 router.post("/add/:idUser/:idDog", (req, res) => {
@@ -233,14 +228,12 @@ router.get("/allBookingPerUser/:idUser", (req, res) => {
 //route qui permet d'afficher que les dates de réservation
 
 router.get("/allBookingDuplicate", (req, res) => {
-  
-    Booking.find({}).then((data) => {
-        if (data) {
-          res.json({ data: data });
-        } else {
-          res.json({ error:"no data"});
-        }
-      
+  Booking.find({}).then((data) => {
+    if (data) {
+      res.json({ data: data });
+    } else {
+      res.json({ error: "no data" });
+    }
   });
 });
 
@@ -276,7 +269,7 @@ router.get("/all", (req, res) => {
 router.get("/all/:nom", (req, res) => {
   User.findOne({
     nom: { $regex: new RegExp(req.params.nom, "i") },
-  }).then(data => {
+  }).then((data) => {
     if (data) {
       res.json({ result: true, user: data });
     } else {
@@ -293,7 +286,7 @@ router.post("/signin", (req, res) => {
   User.findOne({ email: req.body.email }).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       //if (data && req.body.password == data.password) {
-      res.json({ result: true ,data});
+      res.json({ result: true, data });
     } else {
       res.json({ result: false, error: "User not found or wrong password" });
     }
@@ -322,9 +315,6 @@ router.delete("/delete/:idUser/:date/", (req, res) => {
   });
 });
 
-
-
-
 /*router.delete("/delete/:idUser/:date/:idDog", (req, res) => {
   Booking.deleteOne({
     user: req.params.idUser,
@@ -348,11 +338,6 @@ router.delete("/delete/:idUser/:date/", (req, res) => {
 
 //faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
 
-
-
-
-
 module.exports = router;
-
 
 //ro

@@ -13,8 +13,8 @@ import {
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { addIduser } from '../reducers/user';
-import { useDispatch } from "react-redux";
+// import { addIduser } from '../reducers/user';
+// import { useDispatch } from "react-redux";
 
 import { collectData } from "../reducers/user";
 // import { addIduser } from '../reducers/user';
@@ -25,7 +25,7 @@ import { login, logout } from "../reducers/user";
 import * as React from "react";
 import { CheckBox } from 'react-native-elements'
 
-const BACKEND_ADDRESS = 'http://192.168.10.164';
+const BACKEND_ADDRESS = 'http://192.168.10.170';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
