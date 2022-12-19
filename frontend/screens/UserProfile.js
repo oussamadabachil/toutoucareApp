@@ -32,7 +32,9 @@ export default function UserProfile() {
 
   const dispatch = useDispatch();
   const [editView, setEditView] = useState(false)
+  const [userInfosBackup, setUserInfosBackup] = useState();
   const [editColor, setEditColor] = useState('white')
+  
 
   /*Check si le switch est actif ou non*/
   const [isEnabled, setIsEnabled] = useState(false);
@@ -113,6 +115,7 @@ export default function UserProfile() {
 
   const handleModifyBouton = () => {
     setEditView(true);
+    setUserInfosBackup(userInfos);
     console.log(userInfos)
   };
 
@@ -125,6 +128,7 @@ export default function UserProfile() {
 
   const handleCancel = () => {
     setEditView(false);
+    setUserInfos(userInfosBackup);
     setEditColor("white");
   }
 

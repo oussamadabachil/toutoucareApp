@@ -54,7 +54,7 @@ export default function BookingScreen() {
   const reserverAction = () => {
     setModalVisible(!modalVisible);
   };
-  const userToken = useSelector((state) => state.user.value.token);
+  const userToken = useSelector((state) => state.user.value.data.token);
   let obj = {
     date: [],
   };
