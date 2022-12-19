@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const db = require('../database/users');
 
 
 require("../models/connection");
@@ -8,44 +9,57 @@ const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
-router.post("/signup", (req, res) => {
-  if (!checkBody(req.body, ["email", "password"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  }
 
-  // Check if the user has not already been registered
-  User.findOne({ email: req.body.email }).then((data) => {
-    if (data === null) {
-      const hash = bcrypt.hashSync(req.body.password, 10);
+// Création de la DB dans Mongoose
+router.post("/all", (req, res) => {
+ db.map(async(data) => {
 
+      const hash = bcrypt.hashSync(data.password, 10);
       const newUser = new User({
-        email: req.body.email,
+        code_creche: data.code_creche,
+        nom: data.nom,
+        prenom: data.prenom,
+        chien: data.chien,
+        date_de_naissance: data.date_de_naissance,
+        telephone: data.telephone,
+        email: data.email,
         password: hash,
+        rue: data.rue,
+        code_postal:data.code_postal,
+        ville: data.ville,
+        profession: data.profession,
+        nom_contact_urgence: data.nom_contact_urgence,
+        tel_contact_urgence: data.tel_contact_urgence,
         token: uid2(32),
-        code_creche: req.body.code_creche,
-        nom: req.body.nom,
-        prenom: req.body.prenom,
-        chien: req.body.chien,
-        date_de_naissance: req.body.date_de_naissance,
-        telephone: req.body.telephone,
-        rue: req.body.rue,
-        code_postal: req.body.code_postal,
-        ville: req.body.ville,
-        profession: req.body.profession,
-        nom_contact_urgence: req.body.nom_contact_urgence,
-        tel_contact_urgence: req.body.tel_contact_urgence,
-      });
+            })
+    
+    let userSaved = await newUser.save()
+ 
+  })
+  res.json({result : true}) 
 
-      newUser.save().then((newDoc) => {
-        res.json({ result: true, token: newDoc.token });
-      });
-    } else {
-      // User already exists in database
-      res.json({ result: false, error: "User already exists" });
-    }
-  });
-});
+})
+// router.post("/signup", (req, res) => {
+//   if (!checkBody(req.body, ["email", "password"])) {
+//     res.json({ result: false, error: "Missing or empty fields" });
+//     return;
+//   }
+
+//   // Check if the user has not already been registered
+//   User.findOne({ email: req.body.email }).then((data) => {
+//     if (data === null) {
+      
+//       });
+
+//       newUser.save().then((newDoc) => {
+//         res.json({ result: true, token: newDoc.token });
+//       });
+//     } else {
+//       // User already exists in database
+//       res.json({ result: false, error: "User already exists" });
+//     }
+//   });
+// });
 
 router.get("/all", (req, res) => {
   User.find({}).then((data) => {

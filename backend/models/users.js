@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema({
   profession: String,
   nom_contact_urgence: String,
   tel_contact_urgence: String,
+  token: String,
 });
 
 const User = mongoose.model("users", userSchema);
