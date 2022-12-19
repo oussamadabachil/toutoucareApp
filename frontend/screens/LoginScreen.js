@@ -39,12 +39,12 @@ export default function LoginScreen({ navigation }) {
 
   const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
-  let textVerifMail= ""
-  if(email.match(regexMail)){
-  }else{
-    console.log("ko")
-    textVerifMail="Votre adresse mail n'est pas valide"
-
+  let textVerifMail;
+console.log("ko")
+  if (email.length > 5 && !email.match(regexMail)) {
+    textVerifMail = "Votre adresse mail n'est pas valide";
+  } else if (email.match(regexMail)) {
+    textVerifMail = "";
   }
 
 
@@ -88,7 +88,7 @@ export default function LoginScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         dispatch(collectData(data))
         if (data.result) {
           console.log(data.id)
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   containerInput: {
     width: "90%",
     marginRight: "auto",
-    marginLeft: "auto",
+    marginLeft: 5,
   },
   image: {
     width: "100%",

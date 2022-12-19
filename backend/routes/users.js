@@ -285,6 +285,48 @@ router.post("/signin", (req, res) => {
   });
 });
 
+router.put("/modify/:nom", (req, res) => {
+  User.updateOne(
+    {nom: { $regex: new RegExp(req.params.nom, "i") }},
+    {$set:{
+      nom: req.body.nom,
+      prenom: req.body.prenom,
+      chien: req.body.chien,
+      date_de_naissance: req.body.date_de_naissance,
+      telephone: req.body.telephone,
+      rue: req.body.rue,
+      code_postal: req.body.code_postal,
+      ville: req.body.ville,
+      profession: req.body.profession,
+      nom_contact_urgence: req.body.nom_contact_urgence,
+      tel_contact_urgence: req.body.tel_contact_urgence,
+    }}
+  ).then(() => {
+    res.json({ result: true });
+  })
+})
+
+router.put("/modify/:nom", (req, res) => {
+  User.updateOne(
+    {nom: { $regex: new RegExp(req.params.nom, "i") }},
+    {$set:{
+      nom: req.body.nom,
+      prenom: req.body.prenom,
+      chien: req.body.chien,
+      date_de_naissance: req.body.date_de_naissance,
+      telephone: req.body.telephone,
+      rue: req.body.rue,
+      code_postal: req.body.code_postal,
+      ville: req.body.ville,
+      profession: req.body.profession,
+      nom_contact_urgence: req.body.nom_contact_urgence,
+      tel_contact_urgence: req.body.tel_contact_urgence,
+    }}
+  ).then(() => {
+    res.json({ result: true });
+  })
+})
+
 router.get("/booking/:idUser", (req, res) => {
   console.log(req.params.idUser);
   Booking.find({ idUser: req.params.idUser }).then((data) => {

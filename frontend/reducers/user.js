@@ -33,8 +33,11 @@ export const userSlice = createSlice({
       state.value.password = null;
       state.value.code_creche = null;
     },
+    modify: (state, action) => {
+      state.value=action.payload
+    }
   },
 });
 
-export const { login, logout , addIduser,collectData} = userSlice.actions;
+export const { login, logout, , addIdusercollectData, modify} = userSlice.actions;
 export default userSlice.reducer;
