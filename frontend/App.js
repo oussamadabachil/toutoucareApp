@@ -29,20 +29,20 @@ const TabNavigator = () => {
           let iconName = "";
 
           if (route.name === "Home") {
-            iconName = "house";
+            iconName = "home";
           } else if (route.name === "Invoices") {
-            iconName = "fa-regular fa-folder";
+            iconName = "file";
           }
           else if 
             (route.name === "Booking") {
-              iconName = "fa-solid fa-calendar-minus";
+              iconName = "calendar";
           }
           else if(route.name === "Messages") {
-            iconName = "fa-regular fa-comment-dots";
+            iconName = "comment";
           }
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#ec6e5b",
+        tabBarActiveTintColor: "#008486",
         tabBarInactiveTintColor: "#335561",
         headerShown: false,
       })}

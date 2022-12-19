@@ -1,13 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { email: null, places: [] },
+  value: { email: null,  infoUser: "" },
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+
+    addIduser: (state,action)=>{
+      state.value.infoUser = action.payload
+    }
+    ,
     login: (state, action) => {
       state.value.token = action.payload.token;
       state.value.email = action.payload.email;
@@ -23,5 +28,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout} = userSlice.actions;
+export const { login, logout , addIduser} = userSlice.actions;
 export default userSlice.reducer;

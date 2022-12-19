@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+ const mongoose = require("mongoose");
 
 mongoose.set('strictQuery', true);
 const connectionString = "mongodb+srv://Coralietur:cGgI9NNZcCFpsQTd@cluster0.jegajox.mongodb.net/ToutouCare";
