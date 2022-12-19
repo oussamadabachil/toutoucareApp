@@ -16,6 +16,7 @@ const BACKEND_ADDRESS = 'http://192.168.10.164';
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
+  //const [isModalVisible, setIsModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codeCreche, setCode_creche] = useState("");
