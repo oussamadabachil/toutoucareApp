@@ -18,8 +18,7 @@ import {
   Pressable
 } from 'react-native';
 
-import { useDispatch } from "react-redux";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { modify } from "../reducers/user";
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -43,7 +42,7 @@ export default function UserProfile() {
   const [userInfos, setUserInfos] = useState([]);
   
     useEffect(() => {
-
+        console.log(user.data.nom)
       if (!user.data.nom) {
         return;
       }
@@ -211,7 +210,7 @@ export default function UserProfile() {
                   onChangeText={(text) => setUserInfos({...userInfos, telephone: text})}
                   editable={editView} 
                   value={userInfos.telephone}
-                  maxLength='10'
+                  // maxLength= 10
                 />
               </View>
               <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
@@ -302,7 +301,7 @@ export default function UserProfile() {
                   onChangeText={(text) => setUserInfos({...userInfos, tel_urgence_contact: text})}
                   editable={editView} 
                   value={userInfos.tel_contact_urgence}
-                  maxLength='10'
+                  // maxLength='10'
                 />
               </View>
               <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>

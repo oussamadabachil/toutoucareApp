@@ -14,8 +14,6 @@ export const userSlice = createSlice({
     collectData : (state,action )=>{
 
       state.value=action.payload
-
-
     },
     login: (state, action) => {
       state.value.token = action.payload.token;

@@ -101,18 +101,18 @@ await FileSystem.copyAsync({
 
       <Text>Période :</Text>
       <Text>De :</Text>
-      <SelectList
+      {/* <SelectList
         setSelected={(val) => setSelected(val)}
         data={data}
         save="value"
-      />
+      /> */}
 
       <Text>A :</Text>
-      <SelectList
+      {/* <SelectList
         setSelected={(val) => setSelected(val)}
         data={data}
         save="value"
-      />
+      /> */}
     </SafeAreaView>
   );
 }
