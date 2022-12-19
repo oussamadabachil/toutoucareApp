@@ -7,20 +7,21 @@ import {
   Text,
   TextInput,
   View,
-
+  StatusBar,
   TouchableOpacity,
-  SafeAreaView, Linking,
-  Button, Dimensions,
-  View, Share,
+  SafeAreaView, 
+  Linking,
+  Button,
+  Dimensions,
+  Share,
 } from "react-native";
-import { StatusBar } from "react-native";
-//import DocumentPicker, { types } from 'react-native-document-picker';
-import * as DocumentPicker from "expo-document-picker";
-import { SelectList } from "react-native-dropdown-select-list";
-import * as FileSystem from 'expo-file-system';
-import { WebView } from 'react-native-webview';
-import { Document } from 'react-pdf';
-const { downloadAsync, documentDirectory } = FileSystem;
+// // import DocumentPicker, { types } from 'react-native-document-picker';
+// import * as DocumentPicker from "expo-document-picker";
+// import { SelectList } from "react-native-dropdown-select-list";
+// import * as FileSystem from 'expo-file-system';
+// import { WebView } from 'react-native-webview';
+// import { Document } from 'react-pdf';
+// const { downloadAsync, documentDirectory } = FileSystem;
 
 export default function InvoicesScreen() {
   

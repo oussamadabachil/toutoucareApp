@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //push
 import {
@@ -12,14 +12,9 @@ import {
   
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
-import { addIduser } from '../reducers/user';
-import { useDispatch } from "react-redux";
 
+import { useDispatch } from "react-redux";
 import { collectData } from "../reducers/user";
-// import { addIduser } from '../reducers/user';
-
-import { useEffect } from "react";
 import { login, logout } from "../reducers/user";
 
 import * as React from "react";
@@ -46,7 +41,6 @@ console.log("ko")
   } else if (email.match(regexMail)) {
     textVerifMail = "";
   }
-
 
   
   // const handleSubmit = () => {
@@ -89,10 +83,8 @@ console.log("ko")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        dispatch(collectData(data))
         if (data.result) {
-          console.log(data.id)
-          dispatch(addIduser(data.id));
+          dispatch(collectData(data));
           navigation.navigate("TabNavigator", { screen: "Home" });
         }else{
           Alert.alert(data.error)
@@ -105,7 +97,6 @@ console.log("ko")
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.containerForm}>
       <View style={styles.containerInput}>
         <Text style={styles.field}>Votre adresse email</Text>
 
@@ -159,7 +150,6 @@ console.log("ko")
       </TouchableOpacity>
       <Text style={styles.textVerifMail}>{textVerifMail}</Text>
 
-      </View>
     </KeyboardAvoidingView>
   );
 }

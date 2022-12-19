@@ -10,10 +10,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
 
-    addIduser: (state,action)=>{
-      state.value.infoUser = action.payload
-    }
-    ,
+
     collectData : (state,action )=>{
 
       state.value=action.payload
@@ -39,5 +36,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, , addIdusercollectData, modify} = userSlice.actions;
+export const { login, logout, collectData, modify} = userSlice.actions;
 export default userSlice.reducer;

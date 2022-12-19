@@ -54,14 +54,14 @@ export default function BookingScreen() {
   const reserverAction = () => {
     setModalVisible(!modalVisible);
   };
-  const iDuser = useSelector((state) => state.user.value.infoUser);
+  const userToken = useSelector((state) => state.user.value.token);
   let obj = {
     date: [],
   };
   const array = [];
   const arrayB = [];
 
-  const ip = "192.168.10.170";
+  const ip = "192.168.10.180";
 
   const hoursA = [
     "09:00",
@@ -94,7 +94,7 @@ export default function BookingScreen() {
 
   const modifyAction = () => {
     if (newHeureDepose && newHeureRecuperation && newCommentaire) {
-      fetch(`http://${ip}:3000/users/dataBooking/${iDuser}/${selectedDate}`, {
+      fetch(`http://${ip}:3000/users/dataBooking/${userToken}/${selectedDate}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -121,7 +121,7 @@ export default function BookingScreen() {
   };
   useEffect(() => {
     setTimeout(() => {
-      fetch(`http://${ip}:3000/users/booking/${iDuser}`)
+      fetch(`http://${ip}:3000/users/booking/${userToken}`)
         .then((response) => response.json())
         .then((json) => {
           if (json) {
@@ -131,7 +131,7 @@ export default function BookingScreen() {
             setBookings((bookings) => [
               ...bookings,
               json.data[i].date,
-              json.data[i].idUser,
+              json.data[i].userToken,
               json.data[i]._id,
               // json.data[i]._id,
             ]);
@@ -161,9 +161,9 @@ export default function BookingScreen() {
 
   const modifiYApperance = () => {
     console.log("selectedDate", selectedDate);
-    console.log("idUSER", iDuser);
+    console.log("idUSER", userToken);
 
-    fetch(`http://${ip}:3000/users/booking/info/${iDuser}/${selectedDate}`)
+    fetch(`http://${ip}:3000/users/booking/info/${userToken}/${selectedDate}`)
       .then((response) => response.json())
       .then((json) => {
         console.log("json.data", json.data);
@@ -214,7 +214,7 @@ export default function BookingScreen() {
   // console.log(arrayB);
 
   const actualiser = () => {
-    fetch(`http://${ip}:3000/users/booking/${iDuser}`)
+    fetch(`http://${ip}:3000/users/booking/${userToken}`)
       .then((response) => response.json())
       .then((json) => {
         for (let i = 0; i < json.data.length; i++) {
@@ -276,7 +276,7 @@ export default function BookingScreen() {
         .then((json) => {
           console.log(json.data);
           if (json.data < 2) {
-            fetch(`http://${ip}:3000/users/add/${iDuser}`, {
+            fetch(`http://${ip}:3000/users/add/${userToken}`, {
               method: "POST",
               headers: {
                 Accept: "application/json",
@@ -330,7 +330,7 @@ export default function BookingScreen() {
   const numberWeek = moment().week();
 
   const deleteResa = () => {
-    fetch(`http://` + ip + `:3000/users/delete/${iDuser}/${selectedDate}`, {
+    fetch(`http://` + ip + `:3000/users/delete/${userToken}/${selectedDate}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -674,7 +674,7 @@ export default function BookingScreen() {
       </Modal>
 
       <SafeAreaView style={styles.container}>
-        <Popover
+        {/* <Popover
           style={styles.popover}
           from={
             <TouchableOpacity>
@@ -713,7 +713,7 @@ export default function BookingScreen() {
             />
             <Text style={styles.textPopover}>Déconnexion</Text>
           </TouchableOpacity>
-        </Popover>
+        </Popover> */}
 
         <Text
           onPress={() => {

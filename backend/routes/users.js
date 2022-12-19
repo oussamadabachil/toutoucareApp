@@ -113,7 +113,7 @@ router.post("/signin", (req, res) => {
       res.json({
         result: false,
         error:
-          "L'utilisateur n'a pas été trouvé ou mauvais mot de passe (code crèche inclus)",
+        "L'utilisateur n'a pas été trouvé ou mauvais mot de passe (code crèche inclus)",
       });
     }
   });
