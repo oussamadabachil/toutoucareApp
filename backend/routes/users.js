@@ -104,7 +104,7 @@ router.post("/signin", (req, res) => {
       bcrypt.compareSync(req.body.password, data.password) &&
       req.body.codeCreche == "1234"
     ) {
-      res.json({ result: true, id: data._id });
+      res.json({ result: true, data });
     } else {
       res.json({
         result: false,
