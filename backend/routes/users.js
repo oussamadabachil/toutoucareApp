@@ -13,7 +13,6 @@ const bcrypt = require("bcrypt");
 
 // Création de la DB dans Mongoose
 
-/*
 router.post("/all", (req, res) => {
  db.map(async(data) => {
 
@@ -45,9 +44,9 @@ router.post("/all", (req, res) => {
       });
       
       // } else {
-        //   // User already exists in database
-        //   res.json({ result: false, error: "User already exists" });
-        // }
+      //     User already exists in database
+      //     res.json({ result: false, error: "User already exists" });
+      //   }
 });
   
 // //ajout d'une route Toutou
@@ -128,7 +127,7 @@ router.get("/all", (req, res) => {
 
 
 
-router.get("/all/:nom", (req, res) => {
+router.get("/all/:email", (req, res) => {
   User.findOne({
     email: { $regex: new RegExp(req.params.email, "i") },
   }).then(data => {
@@ -314,32 +313,32 @@ router.get("/count/:date", (req, res) => {
 // });
 
 
-router.get("/all/:nom", (req, res) => {
-  User.findOne({
-    nom: { $regex: new RegExp(req.params.nom, "i") },
-  }).then((data) => {
-    if (data) {
-      res.json({ result: true, user: data });
-    } else {
-      res.json({ result: false, error: "User not found" });
-    }
-  });
-});
+// router.get("/all/:nom", (req, res) => {
+//   User.findOne({
+//     nom: { $regex: new RegExp(req.params.nom, "i") },
+//   }).then((data) => {
+//     if (data) {
+//       res.json({ result: true, user: data });
+//     } else {
+//       res.json({ result: false, error: "User not found" });
+//     }
+//   });
+// });
 
-router.post("/signin", (req, res) => {
-  if (!checkBody(req.body, ["email", "password"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  }
-  User.findOne({ email: req.body.email }).then((data) => {
-    if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      //if (data && req.body.password == data.password) {
-      res.json({ result: true, data });
-    } else {
-      res.json({ result: false, error: "User not found or wrong password" });
-    }
-  });
-});
+// router.post("/signin", (req, res) => {
+//   if (!checkBody(req.body, ["email", "password"])) {
+//     res.json({ result: false, error: "Missing or empty fields" });
+//     return;
+//   }
+//   User.findOne({ email: req.body.email }).then((data) => {
+//     if (data && bcrypt.compareSync(req.body.password, data.password)) {
+//       //if (data && req.body.password == data.password) {
+//       res.json({ result: true, data });
+//     } else {
+//       res.json({ result: false, error: "User not found or wrong password" });
+//     }
+//   });
+// });
 // router.post("/signin", (req, res) => {
 //   if (!checkBody(req.body, ["email", "password"])) {
 //     res.json({ result: false, error: "Missing or empty fields" });
@@ -403,5 +402,3 @@ router.delete("/delete/:idUser/:date/", (req, res) => {
 //faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
 
 module.exports = router;
-
-//ro
