@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
+const BACKEND_ADDRESS = 'http://192.168.10.180';
 
 export default function UserProfile() {
 
@@ -29,7 +30,7 @@ export default function UserProfile() {
       if (!user.data.nom) {
         return;
       }
-      fetch(`http://192.168.10.167:3000/users/all/${user.data.nom}`)
+      fetch(`${BACKEND_ADDRESS}:3000/users/all/${user.data.nom}`)
         .then(response => response.json())
         .then(data => {
             if (data.result) {setUserInfos(data.user)};

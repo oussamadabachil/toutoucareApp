@@ -11,6 +11,8 @@ import { login, logout } from "../reducers/user";
 import * as React from "react";
 import { CheckBox } from 'react-native-elements'
 
+const BACKEND_ADDRESS = 'http://192.168.10.164';
+
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
@@ -22,7 +24,7 @@ export default function LoginScreen({ navigation }) {
   const regexMail = /^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}.[a-z]{2,4}$/;
 
   let textVerifMail= ""
-  if(!email && email.match(regexMail)){
+  if(email.match(regexMail)){
   }else{
     
     textVerifMail="Votre adresse email n'est pas valide"
@@ -31,7 +33,7 @@ export default function LoginScreen({ navigation }) {
 
   const connexion = () => {
 
-    fetch("http://192.168.10.167:3000/users/signin", {
+    fetch(`${BACKEND_ADDRESS}:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
