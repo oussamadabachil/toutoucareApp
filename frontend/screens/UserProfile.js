@@ -44,11 +44,10 @@ export default function UserProfile() {
   const [userInfos, setUserInfos] = useState([]);
   
     useEffect(() => {
-        console.log(user.data.nom)
-      if (!user.data.nom) {
+      if (!user.data.email) {
         return;
       }
-      fetch(`${BACKEND_ADDRESS}:3000/users/all/${user.data.nom}`)
+      fetch(`${BACKEND_ADDRESS}:3000/users/all/${user.data.email}`)
         .then(response => response.json())
         .then(data => {
             if (data.result) {setUserInfos(data.user)};
@@ -86,7 +85,7 @@ export default function UserProfile() {
   }
 
   const handleModificationProfil = () => {
-    fetch(`http://192.168.10.182:3000/users/modify/${user.data.nom}`, {
+    fetch(`http://192.168.10.182:3000/users/modify/${user.data.email}`, {
       method: "PUT",
       headers: {
         Accept: 'application/json',
