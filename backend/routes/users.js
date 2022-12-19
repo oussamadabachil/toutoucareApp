@@ -127,10 +127,11 @@ router.get("/all", (req, res) => {
 
 
 
+*/
 
-router.get("/all/:nom", (req, res) => {
+router.get("/all/:email", (req, res) => {
   User.findOne({
-    nom: { $regex: new RegExp(req.params.nom, "i") },
+    nom: { $regex: new RegExp(req.params.email, "i") },
   }).then(data => {
     if (data) {
       res.json({ result: true, user: data });
@@ -140,9 +141,9 @@ router.get("/all/:nom", (req, res) => {
   });
 });
 
-router.put("/modify/:nom", (req, res) => {
+router.put("/modify/:email", (req, res) => {
   User.updateOne(
-    {nom: { $regex: new RegExp(req.params.nom, "i") }},
+    {nom: { $regex: new RegExp(req.params.email, "i") }},
     {$set:{
       nom: req.body.nom,
       prenom: req.body.prenom,
@@ -314,9 +315,9 @@ router.get("/count/:date", (req, res) => {
 // });
 
 
-router.get("/all/:nom", (req, res) => {
+router.get("/all/:email", (req, res) => {
   User.findOne({
-    nom: { $regex: new RegExp(req.params.nom, "i") },
+    email: { $regex: new RegExp(req.params.email, "i") },
   }).then((data) => {
     if (data) {
       res.json({ result: true, user: data });
