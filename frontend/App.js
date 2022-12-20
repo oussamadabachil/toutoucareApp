@@ -14,6 +14,7 @@ import UserProfile from "./screens/UserProfile";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const store = configureStore({
   reducer: { user },
@@ -59,6 +60,7 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <Provider store={store}>
+       <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: true }}>
           <Stack.Screen name="Login" component={LoginScreen} />
@@ -67,6 +69,7 @@ export default function App() {
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 }

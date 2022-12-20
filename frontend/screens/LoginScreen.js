@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-
-//push
 import {
   Alert,
   KeyboardAvoidingView,
@@ -10,24 +7,27 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  SafeAreaView,
+  Image,  
 } from "react-native";
-
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useFonts, Montserrat_600Black } from '@expo-google-fonts/montserrat';
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { collectData } from "../reducers/user";
 import { login, logout } from "../reducers/user";
 
-import * as React from "react";
-import { CheckBox } from "react-native-elements";
 
-const BACKEND_ADDRESS = "http://192.168.10.180";
+const BACKEND_ADDRESS = "http://192.168.10.160";
 
 export default function LoginScreen({ navigation }) {
+  let [fontsLoaded] = useFonts({Montserrat_600Black});
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codeCreche, setCode_creche] = useState("");
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
 
   const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
@@ -38,30 +38,6 @@ export default function LoginScreen({ navigation }) {
   } else if (email.match(regexMail)) {
     textVerifMail = "";
   }
-
-  // const handleSubmit = () => {
-  //   //useEffect(() => {
-  //   fetch("http://192.168.10.134:3000/users/signin", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email, password, code_creche })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         if (data.result) {
-  //           navigation.navigate("TabNavigator");
-  //           dispatch(
-  //             login({
-  //               token: data.token,
-  //               email: data.email,
-  //               password: data.password,
-  //               code_creche: data.code_creche,
-  //             })
-  //           );
-  //         }
-  //         // console.log(data);
-  //       }, []),
-  //   });
-  // };
 
   const connexion = () => {
     fetch(`${BACKEND_ADDRESS}:3000/users/signin`, {
@@ -89,20 +65,25 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View>
+      <SafeAreaView>
+        <View style={styles.TitleContent}>
+        <Image style ={styles.image} source={require('../assets/logo_ombré.png')} accessibilityLabel="logo Toutoucare"/>
+        <Text style={styles.title}>Bienvenue sur ToutouCare</Text>
+        </View>
+        <Text style={styles.contentText}>Votre application de gestion de crèche canine</Text>
       <View style={styles.containerInput}>
-        <Text style={styles.field}>Votre adresse email</Text>
-
+        {/* <Text style={styles.field}>Votre adresse email</Text> */}
         <TextInput
           autoCapitalize="none"
           onChangeText={(value) => setEmail(value)}
           value={email}
           style={styles.input}
           placeholder="Adresse email"
+          outlined
         />
       </View>
       <View style={styles.containerInput}>
-        <Text style={styles.field}>Votre mot de passe</Text>
+        {/* <Text style={styles.field}>Votre mot de passe</Text> */}
         <TextInput
           autoCapitalize="none"
           autoCorrect={false}
@@ -113,20 +94,27 @@ export default function LoginScreen({ navigation }) {
           value={password}
           enablesReturnKeyAutomatically
           style={styles.input}
+          outlined
         />
       </View>
       <View style={styles.containerInput}>
-        <Text style={styles.field}>Votre code crèche</Text>
+        {/* <Text style={styles.field}>Votre code crèche</Text> */}
         <TextInput
           onChangeText={(value) => setCode_creche(value)}
           value={codeCreche}
           placeholder="Code crèche"
           style={styles.inputCreche}
+          outlined
         />
       </View>
 
       <View style={styles.containerCheckbox}>
-        <CheckBox></CheckBox>
+        <BouncyCheckbox value={checked}
+          onPress={(isChecked) => {setChecked}} 
+          fillColor={"#008486"} 
+          unfillColor={"white"}
+          size={30}
+          innerIconStyle={styles.checkStyle}/>
         <Text style={styles.textSC}>Restez connecté</Text>
       </View>
 
@@ -138,42 +126,61 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.textButton}>Se connecter</Text>
       </TouchableOpacity>
       <Text style={styles.textVerifMail}>{textVerifMail}</Text>
-      </View>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#CFDBD5",
+    alignItems: "center",
+    justifyContent: "center",
+    padding:10,
+  },
+  TitleContent : {
+    justifyContent: 'space-between',
+    padding: 8,
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  title : {
+    fontFamily: "Montserrat_600",
+    fontSize: 30,
+    paddingHorizontal : 5,
+    color : "#365B58",
+  },
+  contentText : {
+    fontFamily: "Montserrat_600",
+    fontSize: 15,
+    fontStyle:"italic",
+    paddingHorizontal : 5,
+    alignSelf: "center",
+    color : "#365B58",
+  },
+  image : {
+    padding:5,
+    marginRight: 10,
+    marginLeft :10,
+    width:100,
+    height:100,
+    alignSelf: "center",
+    },
   containerCheckbox: {
     justifyContent: "center",
     width: 300,
     flexDirection: "row",
     alignItems: "center",
   },
-  checkStyle: {
-    alignSelf: "center",
 
-    backgroundColor: "white",
-
-    padding: 122,
-    color: "red",
-  },
-
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   containerInput: {
-    width: "90%",
-    marginRight: "auto",
-    marginLeft: 5,
+    flexDirection:'row',
+    width: 300,
+    alignSelf:"center",
+    justifyContent:"center",
   },
-  image: {
-    width: "100%",
-    height: "50%",
-  },
+
   textVerifMail: {
     textAlign: "center",
     color: "#F12054",
@@ -194,23 +201,26 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50,
     borderRadius: 10,
-    alignItems: "center",
     borderWidth: 1,
     borderColor: "black",
+    alignSelf:"center",
   },
   inputCreche: {
-    marginVertical: 12,
     padding: 12,
+    marginVertical: 12,
     fontSize: 18,
     backgroundColor: "white",
-    width: 200,
+    width: 150,
     height: 50,
-
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "black",
   },
+  checkStyle : {
+    borderWidth: 2,
+    borderColor : "black"
 
+  },
   button: {
     width: 300,
     marginTop: 20,
@@ -226,6 +236,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    alignSelf: "center",
   },
 
   // alignItems: "center",
@@ -244,7 +255,7 @@ const styles = StyleSheet.create({
   },
   field: {
     width: "80%",
-    fontSize: 25,
+    fontSize: 15,
     fontWeight: "600",
   },
   textSC: {
