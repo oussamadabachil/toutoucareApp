@@ -33,11 +33,15 @@ import { useFonts } from "expo-font";
 export default function LoginScreen({ navigation }) {
 
 
+<<<<<<< Updated upstream
 const data = {
   name: 'Divyesh Barad',
   email: 'divyesh@gmail.com',
   address: 'Rajkot',
 }
+=======
+const BACKEND_ADDRESS = "http://192.168.10.170";
+>>>>>>> Stashed changes
 
 
   const dispatch = useDispatch();
@@ -174,6 +178,47 @@ const data = {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< Updated upstream
+=======
+  container: {
+    flex: 1,
+    backgroundColor: "#CFDBD5",
+    alignItems: "center",
+    justifyContent: "center",
+    padding:10,
+  },
+  TitleContent : {
+    justifyContent: 'space-between',
+    padding: 8,
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  title : {
+    // fontFamily: "Montserrat_600",
+    fontSize: 30,
+    fontFamily:"SemiBold",
+    paddingHorizontal : 5,
+    color : "#365B58",
+  },
+  contentText : {
+    // fontFamily: "Montserrat_600",
+    fontSize: 15,
+    fontStyle:"italic",
+    fontFamily:"SemiBold",
+
+    paddingHorizontal : 5,
+    alignSelf: "center",
+    color : "#365B58",
+  },
+  image : {
+    padding:5,
+    marginRight: 10,
+    marginLeft :10,
+    width:100,
+    height:100,
+    alignSelf: "center",
+    },
+>>>>>>> Stashed changes
   containerCheckbox: {
     justifyContent: "center",
     width: 300,
@@ -207,6 +252,7 @@ const styles = StyleSheet.create({
   textVerifMail: {
     textAlign: "center",
     color: "#F12054",
+    
     fontSize: 17,
     fontWeight: "bold",
     marginTop: 20,

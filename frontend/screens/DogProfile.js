@@ -2,8 +2,20 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 
+<<<<<<< Updated upstream
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare'
+=======
+import { useDispatch, useSelector } from "react-redux";
+import { collectData, modify } from "../reducers/dog";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+
+
+
+const BACKEND_ADDRESS = "http://192.168.10.170";
+>>>>>>> Stashed changes
 
 export default function DogProfile() {
 

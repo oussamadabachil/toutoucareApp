@@ -48,6 +48,7 @@ export default function InvoicesScreen() {
   const [dateTo, setDateTo] = useState(new Date());
   const userToken = useSelector((state) => state.user.value.data.token);
   const userNom = useSelector((state) => state.user.value.data.nom);
+<<<<<<< Updated upstream
   const ip = "192.168.10.170";
   /*const [fileResponse, setFileResponse] = useState([]);
 
@@ -81,6 +82,9 @@ await FileSystem.copyAsync({
     console.log(result.uri);
   };*/
 
+=======
+  const ip = "192.168.10.170"
+>>>>>>> Stashed changes
   let pdfUrl = "https://www.orimi.com/pdf-test.pdf";
   //download pdf
 

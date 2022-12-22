@@ -26,7 +26,11 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
 import UploadImage from './UploadImage';
 
+<<<<<<< Updated upstream
 const BACKEND_ADDRESS = 'http://192.168.10.159';
+=======
+const BACKEND_ADDRESS = 'http://192.168.10.170';
+>>>>>>> Stashed changes
 
 export default function UserProfile() {
 
