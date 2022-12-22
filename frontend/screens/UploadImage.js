@@ -1,50 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Image, View, Platform, TouchableOpacity, Text, StyleSheet, Pressable, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { useDispatch, useSelector } from 'react-redux';
+
+const BACKEND_ADDRESS = 'http://192.168.10.159';
 
 export default function UploadImage() {
-  const [image, setImage] = useState(false);
-  console.log(image)
-  const addImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your photos!");
-      return;
-    }
+  const [image, setImage] = useState(null);
+  const userToken = useSelector((state) => state.user.value.data.token)
+  const IMAGE_PATH = `https://res.cloudinary.com/dpapzrkqw/image/upload/v1671611852/toutouCare/${userToken}`;
+  let imageDeProfile;
 
-    let _image = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  const formData = new FormData();
+  let result = false;
+
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+    if (!permissionResult.granted) {
+      alert("Vous avez refusé l'accès à votre librairie")
+    } else if (permissionResult.granted) {
+        result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4,3],
+        aspect: [4, 3],
         quality: 1,
-    });
-    console.log(JSON.stringify(_image));
-  if (!_image.canceled) {
-    console.log(_image.uri);
-    setImage(_image.uri);
+      });
+  
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        formData.append('photoFromFront', {
+          uri: result.uri,
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+        fetch(`${BACKEND_ADDRESS}:3000/photos/upload/${userToken}`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            "Content-Type": "application/json"
+          },
+          body: formData,
+        }).then((response) => response.json())
+      }
     }
-  };
+  }
 
-  let addPhoto;
-  if (image === false) {
-    addPhoto = (
-        <View style={imageUploaderStyles.uploadBtnContainer}>
-            <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                <Text>{image === false ? 'Edit' : 'Add'} Image </Text>
-            </TouchableOpacity>
-        </View>
-    )
+  if (image) {
+    imageDeProfile = <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
   } else {
-    addPhoto = "";
+    imageDeProfile = <Image source={{ uri: IMAGE_PATH }} style={{ width: 100, height: 100 }} />
   }
 
   return (
-        <View style={imageUploaderStyles.container}>
-            {
-                image  && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
-            } 
-            {addPhoto}
-        </View>
+    <View style={imageUploaderStyles.container}>
+      <Pressable onPress={pickImage} style={imageUploaderStyles.container}>
+        {imageDeProfile}
+      </Pressable>
+    </View> 
   );
 }
 const imageUploaderStyles=StyleSheet.create({

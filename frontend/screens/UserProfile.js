@@ -26,7 +26,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
 import UploadImage from './UploadImage';
 
-const BACKEND_ADDRESS = 'http://192.168.10.180';
+const BACKEND_ADDRESS = 'http://192.168.10.159';
 
 export default function UserProfile() {
 
@@ -138,9 +138,6 @@ export default function UserProfile() {
 
   return (
     <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-      <View style={styles.header}> 
-        <Text style={styles.titleText}>Profil</Text>
-      </View>
       <View style={styles.main}>
         <View style={styles.photoNameContainer}>
           <UploadImage/>
@@ -340,17 +337,14 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: 'white',
     flex: 4,
-    paddingTop: 5,
     paddingBottom: 5, 
   },
   photoNameContainer: {
-    marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 10,
+    padding: 20,
+    backgroundColor: '#008486'
   },
   profilNameText: {
     fontSize: 21,
