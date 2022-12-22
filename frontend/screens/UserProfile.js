@@ -1,8 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { 
-  Image, 
-  SafeAreaView, 
   ScrollView, 
   StyleSheet, 
   Text, 
@@ -11,26 +9,17 @@ import {
   TextInput, 
   Switch, 
   KeyboardAvoidingView,
-  Keyboard,
-  Button,
-  TouchableWithoutFeedback,
-  Modal,
   Pressable
 } from 'react-native';
 
 import { useDispatch, useSelector } from "react-redux";
 import { modify } from "../reducers/user";
-
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
-import UploadImage from './UploadImage';
 
-<<<<<<< Updated upstream
-const BACKEND_ADDRESS = 'http://192.168.10.159';
-=======
+
 const BACKEND_ADDRESS = 'http://192.168.10.170';
->>>>>>> Stashed changes
 
 export default function UserProfile() {
 
@@ -40,9 +29,9 @@ export default function UserProfile() {
   const [editColor, setEditColor] = useState('white')
   
 
-  /*Check si le switch est actif ou non*/
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  // /*Check si le switch est actif ou non*/
+  // const [isEnabled, setIsEnabled] = useState(false);
+  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const user = useSelector((state) => state.user.value);
   const [userInfos, setUserInfos] = useState([]);
@@ -57,7 +46,6 @@ export default function UserProfile() {
             if (data.result) {setUserInfos(data.user)};
         });
     }, []);
-    console.log(userInfos);
 
   let modifyBouton = (
     <View style={styles.boutonContainer}>
@@ -135,13 +123,16 @@ export default function UserProfile() {
     setEditColor("white");
   }
 
-  let profilName = "John Doe's profil";
-  if (isEnabled) {
-    profilName = "Rantanplan's profil"
-  }
+  // let profilName = "John Doe's profil";
+  // if (isEnabled) {
+  //   profilName = "Rantanplan's profil"
+  // }
 
   return (
     <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      {/* <View style={styles.header}> 
+        <Text style={styles.titleText}>Profil</Text>
+      </View>
       <View style={styles.main}>
         <View style={styles.photoNameContainer}>
           <UploadImage/>
@@ -156,6 +147,8 @@ export default function UserProfile() {
             />
           </View>
         </View>
+        </View> */}
+        <View style={styles.main}>
         <ScrollView>
             <Pressable 
               style={styles.singleInfoContainer} 
@@ -208,13 +201,28 @@ export default function UserProfile() {
               disabled={!editView}
               >
               <View style={styles.textInfoContainer}>
-                <Text style={styles.text}>Téléphone:</Text>
+                <Text style={styles.text}>Tel:</Text>
                 <TextInput 
                   style={editView ? styles.inputStyleEdit : styles.textInput} 
                   onChangeText={(text) => setUserInfos({...userInfos, telephone: text})}
                   editable={editView} 
                   value={userInfos.telephone}
-                  // maxLength= 10
+                  maxLength={15}
+                />
+              </View>
+              <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Email:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput} 
+                  editable={editView} 
+                  onChangeText={(text) => setUserInfos({...userInfos, email: text})}
+                  value={userInfos.email}
                 />
               </View>
               <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
@@ -284,7 +292,7 @@ export default function UserProfile() {
               disabled={!editView}
             >
               <View style={styles.textInfoContainer}>
-                <Text style={styles.text}>Nom d'urgence:</Text>
+                <Text style={styles.text}>Contact d'urgence:</Text>
                 <TextInput 
                   style={editView ? styles.inputStyleEdit : styles.textInput}
                   onChangeText={(text) => setUserInfos({...userInfos, nom_contact_urgence: text})}
@@ -299,13 +307,13 @@ export default function UserProfile() {
               disabled={!editView}
             >
               <View style={styles.textInfoContainer}>
-                <Text style={styles.text}>Numéro d'urgence:</Text>
+                <Text style={styles.text}>Tel contact urgence:</Text>
                 <TextInput 
                   style={editView ? styles.inputStyleEdit : styles.textInput}
                   onChangeText={(text) => setUserInfos({...userInfos, tel_urgence_contact: text})}
                   editable={editView} 
                   value={userInfos.tel_contact_urgence}
-                  // maxLength='10'
+                  maxLength={15}
                 />
               </View>
               <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
@@ -323,20 +331,9 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
-  header: {
-    flex: 0.35,
-    backgroundColor: '#008486',
-    paddingTop: 9,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  iconProfil: {
-    left: '330%',
   },
   main: {
     backgroundColor: 'white',
@@ -367,10 +364,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 20,
-    paddingLeft: 30,
-    paddingRight: 20,
-    paddingBottom: 20,
+    paddingVertical :10,
+    paddingLeft:15,
     borderTopColor: 'lightgray',
     borderTopWidth: 1,
   },
@@ -379,12 +374,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textInput: {
-    left: '100%',
+    left: '50%',
     fontSize: 18,
     fontWeight: '400',
   },
   inputStyleEdit: {
-    left: '100%',
+    left: '50%',
     fontSize: 18,
     fontWeight: '400',
     paddingHorizontal: 15,
@@ -468,16 +463,6 @@ const styles = StyleSheet.create({
   superBoutonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 50,
-    
-  }
+    paddingHorizontal: 50, 
+  },
 })
-
-// export default function UserProfile() {
-
-//   return (
-//     <>
-//     </>
-//   )
-
-// }

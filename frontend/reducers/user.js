@@ -23,10 +23,7 @@ export const userSlice = createSlice({
       state.value.code_creche = action.payload.code_creche;
     },
     logout: (state) => {
-      state.value.token = null;
-      state.value.email = null;
-      state.value.password = null;
-      state.value.code_creche = null;
+      state.value={}
     },
     modify: (state, action) => {
       state.value=action.payload

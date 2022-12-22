@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 const dogSchema = mongoose.Schema({
-    name: String,
+    nom: String,
     surnoms: String,
     date_de_naissanceDog: String,
     genre: String,
     race: String,
-    Sterilisation: String,
+    Sterilisation: Boolean,
     sante: String,
     caractere: String,
     mesententes_chiens: String,
-    entente_chats: String,
-    entente_enfants: String,
+    entente_chats: Boolean,
+    entente_enfants: Boolean,
     habitudes: String,
     peurs: String,
-    userToken: { type: mongoose.Schema.Types.String, ref: 'users' },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
   })
 
 
