@@ -14,14 +14,14 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useFonts, Montserrat_600Black } from '@expo-google-fonts/montserrat';
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { collectData } from "../reducers/user";
-import { login, logout } from "../reducers/user";
+import { login, collectData } from "../reducers/user";
 
 
-const BACKEND_ADDRESS = "http://192.168.10.160";
+
+const BACKEND_ADDRESS = "http://192.168.10.155";
 
 export default function LoginScreen({ navigation }) {
-  let [fontsLoaded] = useFonts({Montserrat_600Black});
+  // let [fontsLoaded] = useFonts({Montserrat_600Black});
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -146,13 +146,13 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   title : {
-    fontFamily: "Montserrat_600",
+    // fontFamily: "Montserrat_600",
     fontSize: 30,
     paddingHorizontal : 5,
     color : "#365B58",
   },
   contentText : {
-    fontFamily: "Montserrat_600",
+    // fontFamily: "Montserrat_600",
     fontSize: 15,
     fontStyle:"italic",
     paddingHorizontal : 5,
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
   checkStyle : {
     borderWidth: 2,
     borderColor : "black"
-
   },
   button: {
     width: 300,

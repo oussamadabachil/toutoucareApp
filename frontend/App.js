@@ -10,14 +10,15 @@ import HomeScreen from "./screens/HomeScreen";
 import InvoicesScreen from "./screens/InvoicesScreen";
 import MessageScreen from "./screens/MessageScreen";
 import BookingScreen from "./screens/BookingScreen";
-import UserProfile from "./screens/UserProfile";
+import ProfilScreen from "./screens/ProfilScreen";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+import dog from "./reducers/dog";
 import { Provider as PaperProvider } from 'react-native-paper';
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, dog },
 });
 
 const Stack = createNativeStackNavigator();
@@ -27,8 +28,8 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        
         tabBarIcon: ({ color, size }) => {
-
           if (route.name === "Accueil") {
             return <Feather name = 'home' size ={size} color={color} />;
           } 
@@ -40,15 +41,15 @@ const TabNavigator = () => {
           }
           else if (route.name === "Factures") {
             return <FontAwesomeIcon icon={faFolder} size={size} color={color} />;
-          } 
+          }
         },
         tabBarActiveTintColor: "#FFC547",
         tabBarInactiveTintColor: "#008486",
         tabBarShowLabel : false,
-        
         headerShown: false,
-      })}
-    >
+        })
+      }
+      >
       <Tab.Screen name="Accueil" component={HomeScreen} />
       <Tab.Screen name="Calendrier" component={BookingScreen} />
       <Tab.Screen name="Messages" component={MessageScreen} />
@@ -62,10 +63,11 @@ export default function App() {
     <Provider store={store}>
        <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: true }}>
+        <Stack.Navigator screenOptions={{ headerShown:false}}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen name="Profils" component={ProfilScreen} />
+          <Stack.Screen name="Calendrier" component={BookingScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

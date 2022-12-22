@@ -1,98 +1,558 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { 
+  ScrollView, 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  View, 
+  TextInput, 
+  Switch, 
+  KeyboardAvoidingView,
+  Pressable
+} from 'react-native';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare'
+import { useDispatch, useSelector } from "react-redux";
+import { collectData, modify } from "../reducers/dog";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+
+
+
+const BACKEND_ADDRESS = 'http://192.168.10.155';
 
 export default function DogProfile() {
 
+  const dispatch = useDispatch();
   const [editView, setEditView] = useState(false)
+  const [dogInfosBackup, setDogInfosBackup] = useState();
+  const [editColor, setEditColor] = useState('white')
+  const [checked, setChecked] = useState(false);
+  
 
-  const [name, setName] = useState('Louis');
-  const [age, setAge] = useState('23');
-  const [gender, setGender] = useState('male')
+  /*Check si le switch est actif ou non*/
+  // const [isEnabled, setIsEnabled] = useState(false);
+  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const user = useSelector((state) => state.user.value);
+  
+  const [dogInfos, setDogInfos] = useState([]);
 
-  const data = [
-    {type: 'Name', info: name, set: setName},
-    {type: 'Age', info: age, set: setAge},
-    {type: 'Gender', info: gender, set: setGender}
-  ];
-
-  let editColor = 'gold';
-
-  const handleModifyBouton = () => {
-    setEditView(true);
-  }
+useEffect(() => { 
+  fetch(`${BACKEND_ADDRESS}:3000/users/dogs/${user.data._id}`)
+  .then(response => response.json())
+  .then(data => {
+      if (data) {dispatch(collectData(data));
+        setDogInfos(data.dog)
+      }
+    });
+  }, []);
+  const dog = useSelector((state) => state.dog.value);
+  console.log("ICI",dogInfos);
+  
 
   let modifyBouton = (
-    <TouchableOpacity onPress={() => handleModifyBouton()} style={styles.button} activeOpacity={0.8}>
-        <Text>Modifier</Text>
-    </TouchableOpacity>
+    <View style={styles.boutonContainer}>
+      <TouchableOpacity 
+        onPress={() => {handleModifyBouton(), setEditColor("darkgray")}} 
+        style={styles.button} 
+        activeOpacity={0.8}
+      >
+        <Text style={styles.textButton}>Modifier</Text>
+      </TouchableOpacity>  
+    </View>
   )
 
-  let infoText = data.map((data, i) => {
-    return (
-      <View key={i} style={styles.infoModify}>
-        <Text style={styles.text}>{data.type}:</Text>
-        <TextInput style={styles.text} editable={editView} onChangeText={data.set} value={data.info} />
-        <FontAwesomeIcon icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
-      </View>
-    )
-  }) 
-
   if (editView) {
-    editColor = 'black';
     modifyBouton = (
-      <View>
-        <TouchableOpacity onPress={() => handleAccept()} style={styles.button} activeOpacity={0.8}>
-          <Text>Accepter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCancel()} style={styles.button} activeOpacity={0.8}>
-          <Text>Annuler</Text>
-        </TouchableOpacity>
+      <View style={styles.superBoutonContainer}>
+        <View style={styles.boutonContainer}>
+          <TouchableOpacity onPress={() => handleCancel()} style={styles.buttonPressed} activeOpacity={0.8}>
+            <Text style={styles.textButton}>Annuler</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.boutonContainer}>
+          <TouchableOpacity onPress={() => handleAccept()} style={styles.buttonPressed} activeOpacity={0.8}>
+            <Text style={styles.textButton}>Accepter</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 
-  const handleAccept = () => {
-    setEditView(false);
+  const handleModificationProfil = () => {
+    fetch(`${BACKEND_ADDRESS}:3000/users/alldogs/modify/${dog._id}`, {
+      method: "PUT",
+      headers: {
+        Accept: 'application/json',
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nom: dogInfos.nom,
+        surnoms: dogInfos.surnoms,
+        date_de_naissanceDog: dogInfos.date_de_naissance,
+        genre: dogInfos.genre,
+        race: dogInfos.race,
+        Sterilisation: dogInfos.Sterilisation,
+        sante: dogInfos.sante,
+        caractere: dogInfos.caractere,
+        mesententes_chiens: dogInfos.mesententes_chiens,
+        entente_chats: dogInfos.entente_chats,
+        entente_enfants: dogInfos.entente_enfants,
+        habitudes: dogInfos.habitudes,
+        peurs: dogInfos.peurs,
+      }),
+    }).then((response) => response.json())
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+       // ADD THIS THROW error
+        throw error;
+      });
   }
 
+  const handleModifyBouton = () => {
+    setEditView(true);
+    setDogInfosBackup(dogInfos);
+    console.log(dogInfos)
+  };
+
+  const handleAccept = () => {
+    setEditView(false);
+    setEditColor('white')
+    dispatch(modify({data: dogInfos}))
+    handleModificationProfil()
+  };
+
+  const handleCancel = () => {
+    setEditView(false);
+    setDogInfos(dogInfosBackup);
+    setEditColor("white");
+  }
+
+  // let profilName = "John Doe's profil";
+  // if (isEnabled) {
+  //   profilName = "Rantanplan's profil"
+  // }
+
   return (
-    <SafeAreaView style={styles.background}>
-      {infoText}
-      {modifyBouton}
-    </SafeAreaView>
+    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      {/* <View style={styles.header}> 
+        <Text style={styles.titleText}>Profil</Text>
+      </View>
+      <View style={styles.main}>
+        <View style={styles.photoNameContainer}>
+          <UploadImage/>
+          <Text style={styles.profilNameText}>{profilName}</Text>
+          <View style={styles.switchContainer}>
+            <Switch
+              trackColor={{ false: "#767577", true: "#008486" }}
+              thumbColor={isEnabled ? "#FFC547" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+            />
+          </View>
+        </View>
+        </View> */}
+        <View style={styles.main}>
+        <ScrollView>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Nom:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, nom: text})}
+                  editable={editView}
+                  value={dogInfos.nom}
+                />
+              </View>
+              <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Surnoms:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, surnoms: text})}
+                  editable={editView} 
+                  value={dogInfos.surnoms}
+                  multiline={true}
+                  maxWidth="70%"
+                />
+              </View>
+              <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Date de naissance:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput} 
+                  editable={editView} 
+                  onChangeText={(text) => setDogInfos({...dogInfos, date_de_naissanceDog: text})}
+                  value={dogInfos.date_de_naissanceDog}
+                />
+              </View>
+              <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+              >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Genre:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput} 
+                  onChangeText={(text) => setDogInfos({...dogInfos, genre: text})}
+                  editable={editView} 
+                  value={dogInfos.genre}
+                  // maxLength= 10
+                />
+              </View>
+              <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Race:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput} 
+                  onChangeText={(text) => setDogInfos({...dogInfos, race: text})}
+                  editable={editView} 
+                  value={dogInfos.race}
+                />
+              </View>
+              <FontAwesomeIcon icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Stérilisé(e):</Text>
+                <View style={styles.containerCheckbox}>
+                  <BouncyCheckbox
+                    isChecked={dogInfos.Sterilisation}
+                    value={checked}
+                    // onPress={(boolean) => setChecked({...dogInfos, sterilisation: boolean})} 
+                    fillColor={"#008486"} 
+                    unfillColor={"white"}
+                    size={30}
+                    innerIconStyle={styles.checkStyle}
+                    disabled={!editView}/>
+                </View>
+                {/* <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChange={(Boolean) => setDogInfos({...dogInfos, Sterilisation: Boolean})}
+                  editable={editView} 
+                  value={dogInfos.Sterilisation}
+                /> */}
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Problème de santé:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, sante: text})}
+                  editable={editView} 
+                  value={dogInfos.sante}
+                  multiline={true}
+                  maxWidth="70%"
+                />
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Caractère:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, caractere: text})}
+                  editable={editView} 
+                  value={dogInfos.caractere}
+                  multiline={true}
+                  maxWidth="70%"
+                />
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer} 
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Mésententes avec certaines races de chiens ? :</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, mesententes_chiens: text})}
+                  editable={editView} 
+                  value={dogInfos.mesententes_chiens}
+                  multiline={true}
+                  maxWidth="70%"
+                />
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer}
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Entente avec les chats:</Text>
+                <View style={styles.containerCheckbox}>
+                  <BouncyCheckbox
+                    isChecked={dog.entente_chats}
+                    value={checked}
+                    // onPress={(boolean) => setChecked({...dogInfos, entente_chats: boolean})} 
+                    fillColor={"#008486"} 
+                    unfillColor={"white"}
+                    size={30}
+                    innerIconStyle={styles.checkStyle}
+                    disabled={!editView}/>
+                </View>
+                {/* <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, entente_chats: text})}
+                  editable={editView} 
+                  value={dogInfos.entente_chats}
+                /> */}
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer}
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Entente avec les enfants:</Text>
+                <View style={styles.containerCheckbox}>
+                  <BouncyCheckbox
+                    value={dogInfos.entente_enfants}
+                    // onPress={(boolean) => setChecked({...dogInfos, sterilisation: boolean})} 
+                    fillColor={"#008486"} 
+                    unfillColor={"white"}
+                    size={30}
+                    innerIconStyle={styles.checkStyle}
+                    disabled={!editView}/>
+                </View>
+                {/* <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, entente_enfants: text})}
+                  editable={editView} 
+                  value={dogInfos.entente_enfants}
+                /> */}
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer}
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Ses habitudes:</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, habitudes: text})}
+                  editable={editView} 
+                  value={dogInfos.habitudes}
+                  multiline={true}
+                  maxWidth="70%"
+                />
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
+            </Pressable>
+            <Pressable 
+              style={styles.singleInfoContainer}
+              disabled={!editView}
+            >
+              <View style={styles.textInfoContainer}>
+                <Text style={styles.text}>Peur(s) à signaler? :</Text>
+                <TextInput 
+                  style={editView ? styles.inputStyleEdit : styles.textInput}
+                  onChangeText={(text) => setDogInfos({...dogInfos, peurs: text})}
+                  editable={editView} 
+                  value={dogInfos.peurs}
+                  multiline={true}
+                  maxWidth="70%"
+                />
+              </View>
+              <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
+            </Pressable>
+        </ScrollView>
+      
+      </View>
+      <View style={styles.footer}>
+        {modifyBouton}
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-    background: {
-        flex: 1,
-        backgroundColor: 'gold',
-        alignItems: 'center',
-        justifyContent: 'center',
+  background: {
+    flex: 1,
+
+  },
+  titleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  main: {
+    backgroundColor: 'white',
+    flex: 4,
+    paddingTop: 5,
+    paddingBottom: 5, 
+  },
+  photoNameContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 10,
+  },
+  profilNameText: {
+    fontSize: 21,
+    fontWeight: 'bold',
+    right: '10%',
+  },
+  switchContainer: {
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  singleInfoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical :10,
+    paddingLeft:15,
+    borderTopColor: 'lightgray',
+    borderTopWidth: 1,
+  },
+  textInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textInput: {
+    left: '50%',
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  inputStyleEdit: {
+    left: '50%',
+    fontSize: 18,
+    fontWeight: '400',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 5,
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  containerCheckbox: {
+    paddingRight:100,
+  },
+  footer: {
+    flex: 1,
+  },
+  boutonContainer: {
+    alignItems: 'center',
+  },
+  textButton: {
+    textAlign: 'center',
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  textButtonPressed: {
+    textAlign: 'center',
+    color: "#008486",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  button: {
+    width: 200,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
     },
-    button: {
-        backgroundColor: 'lightblue',
-        width: 120,
-        height: 50,
-        color: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 50,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    backgroundColor: "#008486",
+    borderRadius: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonPressed: {
+    width: 150,
+    height: 45,
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
     },
-    text: {
-      fontSize: 20,
-      marginRight: 40,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    backgroundColor: "#008486",
+    borderRadius: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 20, 
+  },
+  buttonPressed2: {
+    width: '50%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
     },
-    infoModify: {
-      flexDirection: 'row',
-      marginBottom: 40,
-    },
-    textInput: {
-      marginRight: 60,
-      fontSize: 20,
-    }
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    backgroundColor: "fff",
+    borderRadius: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 20, 
+    marginBottom: 15,
+    borderWidth: 2,
+    borderColor: '#008486',
+  },
+  superBoutonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 50,
+  },
+  checkStyle : {
+    borderWidth: 1,
+    borderColor : "FFC547"
+  },
 })
