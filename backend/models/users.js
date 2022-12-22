@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema({
   nom_contact_urgence: String,
   tel_contact_urgence: String,
   token: String,
+  image: String,
 
   // chien: { type: mongoose.Schema.Types.ObjectId, ref: 'dogs' },
   booking: { type: mongoose.Schema.Types.ObjectId, ref: 'bookings' },
