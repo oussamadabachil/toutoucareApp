@@ -60,8 +60,6 @@ export default function ProfilScreen() {
           {imageDeProfile}
         </Pressable>
       </View>
-        <Text style={styles.titleText}>Profil</Text>
-      </View>
       <View style={styles.main}>
       <View style={styles.close}>
                 <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.closeModal} activeOpacity={0.8}>
@@ -88,6 +86,7 @@ export default function ProfilScreen() {
       </View>
       </ScrollView>
     </SafeAreaView>
+      </View>
   );
 }
 
