@@ -1,27 +1,18 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Popover from "react-native-popover-view";
 import { useFonts } from "expo-font";
 import { Calendar } from "react-native-calendars";
-// import DropDownPicker from 'react-native-dropdown-picker';
-import CalendarPicker from "react-native-calendar-picker";
-// import { Calendar } from "react-native-calendario";
-import { DatePickerIOSComponent, Pressable } from "react-native";
 import {
   Modal,
   TextInput,
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
   KeyboardAvoidingView,
   Alert,
-  Picker,
 } from "react-native";
 const moment = require("moment");
 import SelectDropdown from "react-native-select-dropdown";
@@ -54,8 +45,6 @@ export default function BookingScreen() {
   ];
 
   
-
-  const [setArrayCalTrue, setSetArrayCalTrue] = useState([]);
   const [modalVisibleCalendar, setModalVisibleCalendar] = useState(false);
   const arrayA = [];
   const arrayOfToken = [];
@@ -77,8 +66,6 @@ export default function BookingScreen() {
   const [duplicata, setDuplicata] = useState([]);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [allDataFromFetchModify, setAllDataFromFetchModify] = useState([]);
-  const [arrayUserToken, setArrayUserToken] = useState([]);
   const [arrayOfUserToken, setArrayOfUserToken] = useState([]);
   const [setDuplicataUserToken, setSetDuplicataUserToken] = useState([]);
   const [commentaireFetchedModify, setCommentaireFetchedModify] = useState("");
@@ -106,7 +93,7 @@ export default function BookingScreen() {
     Bold: require("../assets/styles/Montserrat-Bold.ttf"),
   });
 
-  const ip = "192.168.10.170";
+  const ip = "192.168.10.155";
 
   const hoursA = [
     "09:00",
@@ -237,50 +224,7 @@ export default function BookingScreen() {
     }
   }, []);
 
-  /*
-      fetch(`http://${ip}:3000/users/findUserTokenByDate/${duplicata[1]}`)
-        .then((response) => response.json())
-        .then((json) => {
-          if (json) {
-
-            for (let i = 0; i < json.data.length; i++) {
-              console.log(json.data[i].userToken)
-              // console.log(json.data[i].userToken);
-              arrayOfToken.push(json.data[i].userToken);
-            }
-            // setArrayOfUserToken(arrayOfToken);
-            console.log("arrayOfToken",arrayOfToken);
-            
-
-          }
-        });*/
-  // console.log("tokenArray",arrayOfToken);
-
-  // useEffect(() => {
-  //   const duplicateElement = arrayOfDate.filter(
-  //     (item, index) => arrayOfDate.indexOf(item) !== index
-  //   );
-
-  //   console.log(duplicateElement);
-  //   setDuplicata(duplicateElement);
-  //   for (let i = 0; i < duplicateElement.length; i++) {
-  //     fetch(
-  //       `http://${ip}:3000/users/findUserTokenByDate/${duplicateElement[i]}`
-  //     )
-  //       .then((response) => response.json())
-  //       .then((json) => {
-  //         if (json) {
-  //           for (let i = 0; i < json.data.length; i++) {
-  //             // console.log(json.data[i].userToken);
-  //             arrayOfToken.push(json.data[i].userToken);
-  //           }
-  //           setArrayOfUserToken(arrayOfToken);
-  //         }
-  //       });
-  //   }
-  // }, [arrayOfDate]);
-
-  // // récuperer que les dates qui sont dupliqué plus de 3 fois dans le tableau allBooking
+// récuperer que les dates qui sont dupliqué plus de 3 fois dans le tableau allBooking
 
   const actionComplet = () => {
     const duplicateElement = arrayOfDate.filter(
@@ -515,10 +459,7 @@ export default function BookingScreen() {
 
     const day = date.toLocaleDateString("fr-FR", options);
 
-    //change  dimanche 18 décembre 2022 to dimanche 18/12
-    // console.log(day);
 
-    //
     if (bookings.includes(item)) {
       let reserverOrAlert = (
         <TouchableOpacity
@@ -558,9 +499,6 @@ export default function BookingScreen() {
           <View style={styles.viewDate}>
             <Text onPress={() => {}} style={styles.text}>
               {day}
-              {/*
-    
-     */}
             </Text>
             {reserverOrAlert}
           </View>
@@ -1101,7 +1039,7 @@ const styles = StyleSheet.create({
   },
 
   rowTextStyleDropDown: {
-    fontSize: 20,
+    fontSize: 16,
     color: "black",
     fontWeight: "bold",
     textAlign: "center",
@@ -1126,7 +1064,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   textResaM: {
-    fontSize: 22,
+    fontSize: 18,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
@@ -1142,7 +1080,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   completTexte: {
-    fontSize: 22,
+    fontSize: 18,
     color: "#F12054",
     fontWeight: "bold",
     textAlign: "center",
@@ -1213,7 +1151,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
 
-    fontSize: 20,
+    fontSize: 16,
   },
 
   textComplet: {
@@ -1223,7 +1161,7 @@ const styles = StyleSheet.create({
     color: "#F12054",
     fontWeight: "bold",
     fontFamily: "SemiBold",
-    fontSize: 20,
+    fontSize: 16,
   },
 
   viewModalM: {
@@ -1260,7 +1198,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 20,
   },
 
@@ -1268,7 +1206,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
   },
   buttonCalendar: {
     shadowColor: "#000",
@@ -1293,7 +1231,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
   },
 
   delete: {
@@ -1346,7 +1284,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 20,
   },
 
@@ -1354,7 +1292,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 20,
   },
   inputModalTextArea: {
@@ -1371,14 +1309,14 @@ const styles = StyleSheet.create({
     fontFamily: "SemiBold",
     color: "rgb(124, 124, 124)",
     fontWeight: "700",
-    fontSize: 20,
+    fontSize: 16,
   },
 
   labelModalResa: {
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 18,
     marginBottom: 10,
     marginTop: 10,
   },
@@ -1463,19 +1401,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
   },
   textButtonModal: {
     fontWeight: "bold",
     color: "#008486",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
   },
   iconClose: {
     backgroundColorw: "#fff",
 
-    fontWeight: "light",
-    fontSize: 40,
+    weight: "light",
+    size: 30,
     color: "#fff",
     position: "absolute",
     top: 10,
@@ -1485,12 +1423,12 @@ const styles = StyleSheet.create({
   iconCloseAlert: {
     textAlign: "right",
     width: "100%",
-    fontSize: 40,
+    fontSize: 30,
     color: "#fff",
   },
 
   iconCloseTouchable: {
-    fontSize: 40,
+    fontSize: 30,
 
     color: "#fff",
     position: "absolute",
@@ -1604,7 +1542,7 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     textTransform: "capitalize",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
   },
 
   buttonBell: {
@@ -1638,14 +1576,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
 
-    fontSize: 20,
+    fontSize: 16,
   },
   textPopover: {
     padding: 10,
     color: "black",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 20,
   },
 });

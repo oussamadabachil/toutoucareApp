@@ -6,7 +6,6 @@ import DogProfile from './DogProfile';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
-import UploadImage from './UploadImage';
 import { useSelector } from "react-redux";
 
 const BACKEND_ADDRESS = "http://192.168.10.155";
@@ -54,9 +53,9 @@ export default function ProfilScreen({ navigation }) {
   }
 
   if (image) {
-    imageDeProfil = <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
+    imageDeProfil = <Image source={{ uri: image }}  style={{ width: 100, height: 100, borderRadius:999 }} />
   } else {
-    imageDeProfil = <Image source={{ uri: IMAGE_PATH }} style={{ width: 100, height: 100 }} />
+    imageDeProfil = <Image source={{ uri: IMAGE_PATH }} style={{ width: 100, height: 100, borderRadius:999 }} />
   }
 
     /*Check si le switch est actif ou non*/
@@ -71,13 +70,13 @@ export default function ProfilScreen({ navigation }) {
       <ScrollView>
       <View style={styles.main}>
       <View style={styles.close}>
-                <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.closeModal} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => navigation.navigate("Accueil")} style={styles.closeModal} activeOpacity={0.8}>
                   <FontAwesomeIcon icon={faCircleXmark} size={35} color="#365B58"/>
                 </TouchableOpacity>
               </View>
         <View style={styles.photoNameContainer}>
-        <Pressable onPress={pickImage} style={styles.container}>
-          {imageDeProfil}
+        <Pressable onPress={pickImage} style={styles.profilContainer}>
+          <View style={styles.profilContainer}>{imageDeProfil}</View>
         </Pressable>
             <View style={styles.welcome}>
             <Text style={styles.profilNameText}>Bienvenue</Text>
@@ -137,6 +136,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    
+  },
+  profilContainer: {
+    elevation:2,
+    height:100,
+    width:100,
+    backgroundColor:'#efefef',
+    position:'relative',
+    borderRadius:999,
   },
   welcome:{
     alignSelf: "center",
@@ -203,12 +211,6 @@ const styles = StyleSheet.create({
   textButton: {
     textAlign: 'center',
     color: "#fff",
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  textButtonPressed: {
-    textAlign: 'center',
-    color: "#008486",
     fontWeight: "bold",
     fontSize: 20,
   },
