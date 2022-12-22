@@ -22,12 +22,12 @@ const store = configureStore({
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-
           if (route.name === "Accueil") {
             return <Feather name = 'home' size ={size} color={color} />;
           } 
@@ -39,12 +39,11 @@ const TabNavigator = () => {
           }
           else if (route.name === "Factures") {
             return <FontAwesomeIcon icon={faFolder} size={size} color={color} />;
-          } 
+          }
         },
         tabBarActiveTintColor: "#FFC547",
         tabBarInactiveTintColor: "#008486",
         tabBarShowLabel : false,
-        
         headerShown: false,
       })}
     >
@@ -52,24 +51,10 @@ const TabNavigator = () => {
       <Tab.Screen name="Calendrier" component={BookingScreen} />
       <Tab.Screen name="Messages" component={MessageScreen} />
       <Tab.Screen name="Factures" component={InvoicesScreen} />
+      <Tab.Screen name="Profils" component={ProfilScreen} />
     </Tab.Navigator>
   );
 };
-
-export default function App() {
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: true }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="UserProfile" component={UserProfile} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {

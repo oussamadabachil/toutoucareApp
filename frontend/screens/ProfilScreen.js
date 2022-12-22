@@ -7,7 +7,7 @@ import { Image, View, Platform, TouchableOpacity, Text, StyleSheet, Pressable, B
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 
-const BACKEND_ADDRESS = 'http://192.168.10.159';
+const BACKEND_ADDRESS = 'http://192.168.10.170';
 
 export default function ProfilScreen() {
 
