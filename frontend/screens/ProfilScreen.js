@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 const BACKEND_ADDRESS = "http://192.168.10.155";
 
-export default function ProfilScreen() {
+export default function ProfilScreen({ navigation }) {
 
   const [image, setImage] = useState(null);
   const userToken = useSelector((state) => state.user.value.data.token)
@@ -67,14 +67,8 @@ export default function ProfilScreen() {
     const user = useSelector((state) => state.user.value);
 
   return (
-    <View style={styles.photoNameContainer}>
       <SafeAreaView style={styles.background}>
       <ScrollView>
-      <View style={styles.header}> 
-        <Pressable onPress={pickImage} style={styles.container}>
-          {imageDeProfil}
-        </Pressable>
-      </View>
       <View style={styles.main}>
       <View style={styles.close}>
                 <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.closeModal} activeOpacity={0.8}>
@@ -82,7 +76,9 @@ export default function ProfilScreen() {
                 </TouchableOpacity>
               </View>
         <View style={styles.photoNameContainer}>
-            
+        <Pressable onPress={pickImage} style={styles.container}>
+          {imageDeProfil}
+        </Pressable>
             <View style={styles.welcome}>
             <Text style={styles.profilNameText}>Bienvenue</Text>
             <Text style={styles.profilNameText}>{user.data.chien} et {user.data.prenom}</Text>
@@ -101,7 +97,6 @@ export default function ProfilScreen() {
       </View>
       </ScrollView>
     </SafeAreaView>
-      </View>
   );
 }
 
