@@ -11,7 +11,6 @@ import {
   Button,
 } from "react-native";
 
-
 export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style= {styles.container}>

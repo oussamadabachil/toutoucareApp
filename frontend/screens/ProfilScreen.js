@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import UserProfile from './screens/UserProfile';
-import DogProfile from './screens/DogProfile';
+import UserProfile from './UserProfile';
+import DogProfile from './DogProfile';
 
 import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet, Pressable, Button } from 'react-native';

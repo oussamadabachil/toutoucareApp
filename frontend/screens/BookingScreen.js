@@ -2,7 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Popover from "react-native-popover-view";
-
+import { useFonts } from "expo-font";
+import { Calendar } from "react-native-calendars";
+// import DropDownPicker from 'react-native-dropdown-picker';
+import CalendarPicker from "react-native-calendar-picker";
+// import { Calendar } from "react-native-calendario";
 import { DatePickerIOSComponent, Pressable } from "react-native";
 import {
   Modal,
@@ -25,6 +29,39 @@ import SelectDropdown from "react-native-select-dropdown";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function BookingScreen() {
+  const hours = [
+    "09:00",
+    "9:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+  ];
+
+  
+
+  const [setArrayCalTrue, setSetArrayCalTrue] = useState([]);
+  const [modalVisibleCalendar, setModalVisibleCalendar] = useState(false);
+  const arrayA = [];
+  const arrayOfToken = [];
+  const arrayDateForCalendar = [];
+  const [arrCalendarDate, setArrCalendarDate] = useState([]);
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
   const [newCommentaire, setNewCommentaire] = useState("");
   const [newHeureDepose, setNewHeureDepose] = useState("");
   const [newHeureRecuperation, setNewHeureRecuperation] = useState("");
@@ -41,7 +78,9 @@ export default function BookingScreen() {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [allDataFromFetchModify, setAllDataFromFetchModify] = useState([]);
-
+  const [arrayUserToken, setArrayUserToken] = useState([]);
+  const [arrayOfUserToken, setArrayOfUserToken] = useState([]);
+  const [setDuplicataUserToken, setSetDuplicataUserToken] = useState([]);
   const [commentaireFetchedModify, setCommentaireFetchedModify] = useState("");
   const [heureDePoseFetchedModify, setHeureDePoseFetchedModify] = useState("");
   const [
@@ -55,11 +94,17 @@ export default function BookingScreen() {
     setModalVisible(!modalVisible);
   };
   const userToken = useSelector((state) => state.user.value.data.token);
+
   let obj = {
     date: [],
   };
   const array = [];
+  const [arrayOfDate, setArrayOfDate] = useState([]);
   const arrayB = [];
+  const [fontsLoaded] = useFonts({
+    SemiBold: require("../assets/styles/SemiBold.ttf"),
+    Bold: require("../assets/styles/Montserrat-Bold.ttf"),
+  });
 
   const ip = "192.168.10.170";
 
@@ -93,19 +138,22 @@ export default function BookingScreen() {
   ];
 
   const modifyAction = () => {
-    if (newHeureDepose && newHeureRecuperation && newCommentaire) {
-      fetch(`http://${ip}:3000/users/dataBooking/${userToken}/${selectedDate}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          heureDeDepose: newHeureDepose,
-          heureDeRecuperation: newHeureRecuperation,
-          commentaire: newCommentaire,
-        }),
-      })
+    if (newHeureDepose && newHeureRecuperation) {
+      fetch(
+        `http://${ip}:3000/bookings/dataBooking/${userToken}/${selectedDate}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            heureDeDepose: newHeureDepose,
+            heureDeRecuperation: newHeureRecuperation,
+            commentaire: newCommentaire,
+          }),
+        }
+      )
         .then((response) => response.json())
         .then((json) => {
-          console.log(json);
+          // console.log(json);
         });
       Alert.alert("Modification effectuée");
 
@@ -121,7 +169,7 @@ export default function BookingScreen() {
   };
   useEffect(() => {
     setTimeout(() => {
-      fetch(`http://${ip}:3000/users/booking/${userToken}`)
+      fetch(`http://${ip}:3000/bookings/allBookingPerUser/${userToken}`)
         .then((response) => response.json())
         .then((json) => {
           if (json) {
@@ -135,35 +183,133 @@ export default function BookingScreen() {
               json.data[i]._id,
               // json.data[i]._id,
             ]);
+
+            arrayDateForCalendar.push(json.data[i].date);
           }
+
+          setArrCalendarDate(arrayDateForCalendar);
         });
 
-      fetch(`http://${ip}:3000/users/allBookingDuplicate`)
+      fetch(`http://${ip}:3000/bookings/allBookingDuplicate`)
         .then((response) => response.json())
         .then((json) => {
           // console.log(json.data);
 
           for (let i = 0; i < json.data.length; i++) {
             // console.log(json.data[i].date);
-            // console.log('json.data[i].idUser',json.data[i]);
-            // objectA[json.data[i].idUser  + '=>'+i] = json.data[i].date;
-            // obj.date.push(json.data[i].date);
+
+            // console.log(json.data[i].userToken)
+
+            // console.log(json.data[i].date);
+
+            arrayA.push(json.data[i].date);
           }
+
+          setArrayOfDate(arrayA);
 
           setAllBooking(objectA);
         });
     }, 1000);
   }, []);
 
+  useEffect(() => {
+    const duplicateElement = arrayOfDate.filter(
+      (item, index) => arrayOfDate.indexOf(item) !== index
+    );
+    setDuplicata(duplicateElement);
+    console.log("duplicata", duplicateElement);
+
+    for (let i = 0; i < duplicata.length; i++) {
+      fetch(`http://${ip}:3000/bookings/findUserTokenByDate/${duplicata[i]}`)
+        .then((response) => response.json())
+        .then((json) => {
+          if (json) {
+            for (let i = 0; i < json.data.length; i++) {
+              console.log("eze", json.data[i].userToken);
+              // console.log(json.data[i].userToken);
+              arrayOfToken.push(json.data[i].userToken);
+            }
+            // setArrayOfUserToken(arrayOfToken);
+            console.log("arrayOfToken", arrayOfToken);
+            setSetDuplicataUserToken(arrayOfToken);
+          }
+        });
+    }
+  }, []);
+
+  /*
+      fetch(`http://${ip}:3000/users/findUserTokenByDate/${duplicata[1]}`)
+        .then((response) => response.json())
+        .then((json) => {
+          if (json) {
+
+            for (let i = 0; i < json.data.length; i++) {
+              console.log(json.data[i].userToken)
+              // console.log(json.data[i].userToken);
+              arrayOfToken.push(json.data[i].userToken);
+            }
+            // setArrayOfUserToken(arrayOfToken);
+            console.log("arrayOfToken",arrayOfToken);
+            
+
+          }
+        });*/
+  // console.log("tokenArray",arrayOfToken);
+
+  // useEffect(() => {
+  //   const duplicateElement = arrayOfDate.filter(
+  //     (item, index) => arrayOfDate.indexOf(item) !== index
+  //   );
+
+  //   console.log(duplicateElement);
+  //   setDuplicata(duplicateElement);
+  //   for (let i = 0; i < duplicateElement.length; i++) {
+  //     fetch(
+  //       `http://${ip}:3000/users/findUserTokenByDate/${duplicateElement[i]}`
+  //     )
+  //       .then((response) => response.json())
+  //       .then((json) => {
+  //         if (json) {
+  //           for (let i = 0; i < json.data.length; i++) {
+  //             // console.log(json.data[i].userToken);
+  //             arrayOfToken.push(json.data[i].userToken);
+  //           }
+  //           setArrayOfUserToken(arrayOfToken);
+  //         }
+  //       });
+  //   }
+  // }, [arrayOfDate]);
+
   // // récuperer que les dates qui sont dupliqué plus de 3 fois dans le tableau allBooking
 
+  const actionComplet = () => {
+    const duplicateElement = arrayOfDate.filter(
+      (item, index) => arrayOfDate.indexOf(item) !== index
+    );
+
+    setDuplicata(duplicateElement);
+
+    fetch(
+      `http://${ip}:3000/bookings/findUserTokenByDate/${duplicateElement[0]}`
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        if (json) {
+          for (let i = 0; i < json.data.length; i++) {
+            arrayOfToken.push(json.data[i].userToken);
+          }
+          setArrayOfUserToken(arrayOfToken);
+        }
+      });
+  };
   const repeatedValues = [];
-
   const modifiYApperance = () => {
-    console.log("selectedDate", selectedDate);
-    console.log("idUSER", userToken);
+    // console.log("selectedDate", selectedDate);
+    // console.log("idUSER", userToken);
 
-    fetch(`http://${ip}:3000/users/booking/info/${userToken}/${selectedDate}`)
+    fetch(
+      `http://${ip}:3000/bookings/booking/info/${userToken}/${selectedDate}`
+    )
       .then((response) => response.json())
       .then((json) => {
         console.log("json.data", json.data);
@@ -171,13 +317,6 @@ export default function BookingScreen() {
         setHeureDePoseFetchedModify(json.data.heureDeDepose);
         setHeureDeRecuperationFetchedModify(json.data.heureDeRecuperation);
       });
-
-    console.log("commentaireFetchedModify", commentaireFetchedModify);
-    console.log("heureDePoseFetchedModify", heureDePoseFetchedModify);
-    console.log(
-      "heureDeRecuperationFetchedModify",
-      heureDeRecuperationFetchedModify
-    );
   };
 
   const afficher = () => {
@@ -214,7 +353,7 @@ export default function BookingScreen() {
   // console.log(arrayB);
 
   const actualiser = () => {
-    fetch(`http://${ip}:3000/users/booking/${userToken}`)
+    fetch(`http://${ip}:3000/bookings/allBookingPerUser/${userToken}`)
       .then((response) => response.json())
       .then((json) => {
         for (let i = 0; i < json.data.length; i++) {
@@ -259,7 +398,6 @@ export default function BookingScreen() {
   //display the day after
   const todayDate = moment().format("YYYY-MM-DD");
   // console.log(moment().format("LLL", "fr"));
-
   for (let i = counter - 7; i < counter; i++) {
     array.push(moment().add(i, "days").format("YYYY-MM-DD"));
   }
@@ -271,12 +409,12 @@ export default function BookingScreen() {
       setModalVisible(!modalVisible);
       //count the number of booking
 
-      fetch(`http://${ip}:3000/users/count/${selectedDate}`)
+      fetch(`http://${ip}:3000/bookings/count/${selectedDate}`)
         .then((response) => response.json())
         .then((json) => {
-          console.log(json.data);
+          // console.log(json.data);
           if (json.data < 2) {
-            fetch(`http://${ip}:3000/users/add/${userToken}`, {
+            fetch(`http://${ip}:3000/bookings/add/${userToken}`, {
               method: "POST",
               headers: {
                 Accept: "application/json",
@@ -329,14 +467,18 @@ export default function BookingScreen() {
   };
   const numberWeek = moment().week();
 
+  const takeTheElements = () => {};
   const deleteResa = () => {
-    fetch(`http://` + ip + `:3000/users/delete/${userToken}/${selectedDate}`, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://` + ip + `:3000/bookings/delete/${userToken}/${selectedDate}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((json) => {
         if (json.result) {
@@ -374,36 +516,9 @@ export default function BookingScreen() {
     const day = date.toLocaleDateString("fr-FR", options);
 
     //change  dimanche 18 décembre 2022 to dimanche 18/12
-    console.log(day);
+    // console.log(day);
 
-    // if(uniqueArrayduplicate.has(item,iDuser)){
-    //   let reserverOrAlert = (
-    //     <TouchableOpacity
-    //       style={styles.buttonDejaReserver}
-    //       onPress={() => {
-    //         setModalVisible2(!modalVisible2);
-    //         setSelectedDate(item);
-    //       }}
-    //     >
-    //       <Text style={styles.textButtonNonDispo}>Complet</Text>
-    //     </TouchableOpacity>
-    //   );
-    //   return (
-    //     <>
-    //       <View style={styles.viewDate}>
-    //         <Text onPress={() => {}} style={styles.text}>
-    //           {item}
-    //         </Text>
-    //         {reserverOrAlert}
-    //       </View>
-    //     </>
-    //   );
-    // }
-
-    // const duplicateElementInOBject = allBooking.filter(
-    //   (booking) => booking.date === item
-    // );
-
+    //
     if (bookings.includes(item)) {
       let reserverOrAlert = (
         <TouchableOpacity
@@ -482,6 +597,107 @@ export default function BookingScreen() {
 
   return (
     <>
+      {/* 
+// */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleCalendar}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalCalendar}
+        >
+          <View style={styles.viewModalCalendar}>
+          <View style={styles.viewModalCalendar}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("test");
+                setModalVisibleCalendar(!modalVisibleCalendar);
+              }}
+            >
+              <FontAwesome
+                name="times"
+                size={34}
+                color="white"
+                style={styles.iconCloseAlert}
+              />
+            </TouchableOpacity>
+            <Text style={styles.labelModalResa}>
+              Voici le calendrier des réservations
+            </Text>
+
+            <Calendar />
+            <TouchableOpacity
+              style={styles.buttonModalAnnuler}
+              onPress={() => {
+                console.log(arrCalendarDate);
+                setModalVisibleCalendar(!modalVisibleCalendar);
+              }}
+            >
+              <Text style={styles.textButtonModalAnnuler}>Annuler</Text>
+            </TouchableOpacity>
+          </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+      {/* //
+
+ */}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleAlert}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modal}
+        >
+          <View style={styles.viewModal}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("test");
+                setModalVisibleAlert(!modalVisibleAlert);
+              }}
+            >
+              <FontAwesome
+                name="times"
+                size={34}
+                color="white"
+                style={styles.iconCloseAlert}
+              />
+            </TouchableOpacity>
+            <Text style={styles.labelModal}>
+              Voulez vous recevoir une alerte pour cette date :{" "}
+            </Text>
+
+            <Text style={styles.textModal}>{selectedDate}</Text>
+
+            <TouchableOpacity
+              style={styles.buttonModalValider}
+              onPress={() => {
+                bookResa();
+              }}
+            >
+              <Text style={styles.textButtonModal}>Valider</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.buttonModalAnnuler}
+              onPress={() => {
+                setModalVisibleAlert(!modalVisibleAlert);
+              }}
+            >
+              <Text style={styles.textButtonModalAnnuler}>Annuler</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      {/*
+       */}
+
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <KeyboardAvoidingView
           onPress={() => {
@@ -507,27 +723,75 @@ export default function BookingScreen() {
 
             <Text style={styles.textModal}>{selectedDate}</Text>
             <Text style={styles.labelModal}>Horaire de dépose</Text>
-            <TextInput
+            <SelectDropdown
+              dropdownIconPosition="right"
+              dropdownStyle={styles.dropdownStyleDropDown}
+              rowStyle={styles.rowStyleDropDown}
+              rowTextStyle={styles.rowTextStyleDropDown}
+              renderDropdownIcon={() => {
+                return (
+                  <FontAwesome
+                    name="angle-down"
+                    size={24}
+                    color="black"
+                    style={styles.iconDropDown}
+                  />
+                );
+              }}
+              buttonTextStyle={styles.buttonTextStyleDropDown}
+              buttonStyle={styles.buttonStyleDropDown}
+              defaultButtonText="Choisissez une heure"
+              style={styles.dropDown}
+              onSelect={(selectedItem, index) => {
+                setHeureDePose(selectedItem);
+              }}
+              data={hours}
+            ></SelectDropdown>
+            {/* <TextInput
               onChangeText={(heureDePose) => setHeureDePose(heureDePose)}
               value={heureDePose}
               style={styles.inputModal}
               placeholder="Heure de dépose"
-            />
+            /> */}
 
             <Text style={styles.labelModal}>Horaire de récupération</Text>
-            <TextInput
+            <SelectDropdown
+              onSelect={(selectedItem, index) => {
+                setHeureDeRecuperation(selectedItem);
+              }}
+              renderDropdownIcon={() => {
+                return (
+                  <FontAwesome
+                    name="angle-down"
+                    size={24}
+                    color="black"
+                    style={styles.iconDropDown}
+                  />
+                );
+              }}
+              dropdownIconPosition="right"
+              dropdownStyle={styles.dropdownStyleDropDown}
+              rowStyle={styles.rowStyleDropDown}
+              rowTextStyle={styles.rowTextStyleDropDown}
+              buttonTextStyle={styles.buttonTextStyleDropDown}
+              buttonStyle={styles.buttonStyleDropDown}
+              defaultButtonText="Choisissez une heure"
+              style={styles.dropDown}
+              data={hours}
+            ></SelectDropdown>
+            {/* <TextInput
               onChangeText={(heureDeRecuperation) =>
                 setHeureDeRecuperation(heureDeRecuperation)
               }
               style={styles.inputModal}
               placeholder="Heure de récupération"
-            />
+            /> */}
 
             <Text style={styles.labelModal}>Commentaire</Text>
             <TextInput
               onChangeText={(commentaire) => setCommentaire(commentaire)}
               style={styles.inputModalTextArea}
-              placeholder="Commentaire"
+              placeholder="Optionnel"
             />
             <TouchableOpacity
               style={styles.buttonModal}
@@ -612,29 +876,65 @@ export default function BookingScreen() {
             <View style={styles.containerButtonsM}>
               <Text style={styles.textModificationTitle}>Modification </Text>
               <Text style={styles.textModalHd}>Heure de dépose </Text>
+              <SelectDropdown
+                dropdownIconPosition="right"
+                dropdownStyle={styles.dropdownStyleDropDown}
+                rowStyle={styles.rowStyleDropDown}
+                rowTextStyle={styles.rowTextStyleDropDown}
+                renderDropdownIcon={() => {
+                  return (
+                    <FontAwesome
+                      name="angle-down"
+                      size={24}
+                      color="black"
+                      style={styles.iconDropDown}
+                    />
+                  );
+                }}
+                buttonTextStyle={styles.buttonTextStyleDropDown}
+                buttonStyle={styles.buttonStyleDropDown}
+                defaultButtonText={heureDePoseFetchedModify}
+                style={styles.dropDown}
+                onSelect={(selectedItem, index) => {
+                  setNewHeureDepose(selectedItem);
+                }}
+                data={hours}
+              ></SelectDropdown>
 
-              <TextInput
+              {/* <TextInput
                 placeholder={heureDePoseFetchedModify}
                 onChangeText={(text) => {
                   setNewHeureDepose(text);
                 }}
                 value={newHeureDepose}
                 style={styles.inputModal}
-              ></TextInput>
+              ></TextInput> */}
 
               <Text style={styles.textModalHd}>Heure de récupération </Text>
-
-              <TextInput
-                placeholder={heureDeRecuperationFetchedModify}
-                // placeholder={allDataFromFetchModify.heureDeRecuperation.toString()}
-                onChangeText={(text) => {
-                  setNewHeureRecuperation(text);
+              <SelectDropdown
+                dropdownIconPosition="right"
+                dropdownStyle={styles.dropdownStyleDropDown}
+                rowStyle={styles.rowStyleDropDown}
+                rowTextStyle={styles.rowTextStyleDropDown}
+                renderDropdownIcon={() => {
+                  return (
+                    <FontAwesome
+                      name="angle-down"
+                      size={24}
+                      color="black"
+                      style={styles.iconDropDown}
+                    />
+                  );
                 }}
-                value={newHeureRecuperation}
-                // placeholder= {allDataFromFetchModify[0].heure_depose}
-
-                style={styles.inputModal}
-              />
+                buttonTextStyle={styles.buttonTextStyleDropDown}
+                buttonStyle={styles.buttonStyleDropDown}
+                defaultButtonText={heureDeRecuperationFetchedModify}
+                style={styles.dropDown}
+                onSelect={(selectedItem, index) => {
+                  setNewHeureRecuperation(selectedItem);
+                }}
+                data={hours}
+              ></SelectDropdown>
 
               <Text style={styles.textModalHd}>Commentaire </Text>
               <TextInput
@@ -674,6 +974,19 @@ export default function BookingScreen() {
       </Modal>
 
       <SafeAreaView style={styles.container}>
+        <TouchableOpacity
+          style={styles.buttonCalendar}
+          onPress={() => {
+            setModalVisibleCalendar(!modalVisibleCalendar);
+          }}
+        >
+          <FontAwesome
+            name="calendar"
+            size={24}
+            color="white"
+            style={styles.iconPlus}
+          />
+        </TouchableOpacity>
         {/* <Popover
           style={styles.popover}
           from={
@@ -717,7 +1030,7 @@ export default function BookingScreen() {
 
         <Text
           onPress={() => {
-            afficher();
+            console.log(setDuplicataUserToken);
           }}
           style={styles.weekTitle}
         >
@@ -759,7 +1072,6 @@ export default function BookingScreen() {
             }}
           />
         </View>
-        <Text></Text>
         <ScrollView style={styles.scroll}>{arrayList}</ScrollView>
       </SafeAreaView>
     </>
@@ -767,6 +1079,36 @@ export default function BookingScreen() {
 }
 
 const styles = StyleSheet.create({
+  rowStyleDropDown: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "white",
+    height: 60,
+    borderRadius: 10,
+    marginTop: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    marginBottom: 5,
+  },
+
+  rowTextStyleDropDown: {
+    fontSize: 20,
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 10,
+    fontFamily: "SemiBold",
+    marginBottom: 20,
+  },
   profilPicture: {
     zIndex: 1,
     width: 70,
@@ -791,7 +1133,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
-
+  dropDown: {},
   flexContainer: {
     marginTop: 20,
     width: "80%",
@@ -799,6 +1141,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  completTexte: {
+    fontSize: 22,
+    color: "#F12054",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+
+  buttonComplet: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    backgroundColor: "transparent",
+    borderRadius: 13,
+    // paddingVertical: 10,
+    // paddingHorizontal: 20,
+  },
+
   buttonDejaReserver: {
     shadowColor: "#000",
     shadowOffset: {
@@ -813,6 +1177,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
+  dropdownStyleDropDown: {
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+
   buttonPopover: {
     backgroundColor: "red",
     flexDirection: "row",
@@ -840,6 +1209,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   textButtonNonDispo: {
+    fontFamily: "SemiBold",
     color: "#fff",
     fontWeight: "bold",
 
@@ -852,6 +1222,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: "#F12054",
     fontWeight: "bold",
+    fontFamily: "SemiBold",
     fontSize: 20,
   },
 
@@ -864,6 +1235,14 @@ const styles = StyleSheet.create({
 
   viewModal: {
     width: "90%",
+    backgroundColor: "#008486",
+    padding: 20,
+    borderRadius: 10,
+  },
+
+  viewModalCalendar: {
+    height: "100%",
+    width: "100%",
     backgroundColor: "#008486",
     padding: 20,
     borderRadius: 10,
@@ -891,6 +1270,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
+  buttonCalendar: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+
+    backgroundColor: "#008486",
+    borderRadius: 10,
+    zIndex: 2,
+    position: "absolute",
+    bottom: 10,
+    right: 20,
+    padding: 15,
+    borderRadius: 50,
+  },
   textModalS: {
     color: "#fff",
     fontWeight: "bold",
@@ -911,6 +1309,13 @@ const styles = StyleSheet.create({
     color: "#fff",
     backgroundColor: "#F12054",
   },
+  modalCalendar: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   modal: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -963,18 +1368,81 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   intervalWeek: {
+    fontFamily: "SemiBold",
     color: "rgb(124, 124, 124)",
     fontWeight: "700",
     fontSize: 20,
   },
 
+  labelModalResa: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 22,
+    marginBottom: 10,
+    marginTop: 10,
+  },
   labelModal: {
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 17,
-    marginBottom: 20,
+    marginBottom: 10,
+    marginTop: 10,
   },
+  buttonModalAnnuler: {
+    marginTop: 20,
+    backgroundColor: "#F12054",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    borderRadius: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonStyleDropDown: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    borderRadius: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonModalValider: {
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    borderRadius: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+
   buttonModal: {
     backgroundColor: "#fff",
     padding: 10,
@@ -990,6 +1458,12 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     paddingVertical: 10,
     paddingHorizontal: 20,
+  },
+  textButtonModalAnnuler: {
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 20,
   },
   textButtonModal: {
     fontWeight: "bold",
@@ -1007,6 +1481,14 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
   },
+
+  iconCloseAlert: {
+    textAlign: "right",
+    width: "100%",
+    fontSize: 40,
+    color: "#fff",
+  },
+
   iconCloseTouchable: {
     fontSize: 40,
 
@@ -1019,6 +1501,7 @@ const styles = StyleSheet.create({
   weekTitle: {
     fontSize: 21,
     fontWeight: "bold",
+    fontFamily: "Bold",
   },
 
   lottie: {
@@ -1110,10 +1593,16 @@ const styles = StyleSheet.create({
     width: "60%",
     marginTop: 20,
   },
+  buttonTextStyleDropDown: {
+    color: "#008486",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 14,
+  },
 
   text: {
+    fontFamily: "Bold",
     textTransform: "capitalize",
-    fontWeight: "600",
     textAlign: "center",
     fontSize: 20,
   },
@@ -1159,7 +1648,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
-
 });
 
 //fomat json date

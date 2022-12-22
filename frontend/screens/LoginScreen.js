@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import RNHTMLtoPDF from "react-native-html-to-pdf";
+import { PDFView, PDFDownloadLink } from 'react-native-pdf-lib';
+
+
+import RNPrint from "react-native-print";
+import HTML from "react-native-render-html";
 
 //push
 import {
   Alert,
+  TouchableHighlight,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -20,14 +28,28 @@ import * as React from "react";
 import { CheckBox } from "react-native-elements";
 
 const BACKEND_ADDRESS = "http://192.168.10.170";
+import { useFonts } from "expo-font";
 
 export default function LoginScreen({ navigation }) {
+
+
+const data = {
+  name: 'Divyesh Barad',
+  email: 'divyesh@gmail.com',
+  address: 'Rajkot',
+}
+
+
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [codeCreche, setCode_creche] = useState("");
   const [checked, setChecked] = React.useState(false);
+  const [fontsLoaded] = useFonts({
+    SemiBold: require("../assets/styles/SemiBold.ttf"),
+    Bold: require("../assets/styles/Montserrat-Bold.ttf"),
+  });
 
   const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
@@ -90,55 +112,63 @@ export default function LoginScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-      <View style={styles.containerInput}>
-        <Text style={styles.field}>Votre adresse email</Text>
+        <View style={styles.containerInput}>
+          <Text style={styles.field}>Votre adresse email</Text>
+    
+          <TextInput
+            autoCapitalize="none"
+            onChangeText={(value) => setEmail(value)}
+            value={email}
+            style={styles.input}
+            placeholder="Adresse email"
+          />
+        </View>
+        <View style={styles.containerInput}>
+          <Text style={styles.field}>Votre mot de passe</Text>
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            textContentType="newPassword"
+            secureTextEntry
+            placeholder="Mot de passe"
+            onChangeText={(value) => setPassword(value)}
+            value={password}
+            enablesReturnKeyAutomatically
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.containerInput}>
+          <Text style={styles.field}>Votre code crèche</Text>
+          <TextInput
+            onChangeText={(value) => setCode_creche(value)}
+            value={codeCreche}
+            placeholder="Code crèche"
+            style={styles.inputCreche}
+          />
+        </View>
 
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(value) => setEmail(value)}
-          value={email}
-          style={styles.input}
-          placeholder="Adresse email"
-        />
-      </View>
-      <View style={styles.containerInput}>
-        <Text style={styles.field}>Votre mot de passe</Text>
-        <TextInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          textContentType="newPassword"
-          secureTextEntry
-          placeholder="Mot de passe"
-          onChangeText={(value) => setPassword(value)}
-          value={password}
-          enablesReturnKeyAutomatically
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.containerInput}>
-        <Text style={styles.field}>Votre code crèche</Text>
-        <TextInput
-          onChangeText={(value) => setCode_creche(value)}
-          value={codeCreche}
-          placeholder="Code crèche"
-          style={styles.inputCreche}
-        />
+        <View style={styles.containerCheckbox}>
+          <CheckBox></CheckBox>
+          <Text style={styles.textSC}>Restez connecté</Text>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => connexion()}
+          style={styles.button}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.textButton}>Se connecter</Text>
+        </TouchableOpacity>
+        <Text style={styles.textVerifMail}>{textVerifMail}</Text>
       </View>
 
-      <View style={styles.containerCheckbox}>
-        <CheckBox></CheckBox>
-        <Text style={styles.textSC}>Restez connecté</Text>
-      </View>
-
-      <TouchableOpacity
-        onPress={() => connexion()}
-        style={styles.button}
-        activeOpacity={0.8}
+      <TouchableHighlight
+        onPress={() => {
+          generatePdf();
+        }}
       >
-        <Text style={styles.textButton}>Se connecter</Text>
-      </TouchableOpacity>
-      <Text style={styles.textVerifMail}>{textVerifMail}</Text>
-      </View>
+        <Text>Create PDF</Text>
+      </TouchableHighlight>
     </KeyboardAvoidingView>
   );
 }
@@ -243,9 +273,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   field: {
+    fontFamily: "SemiBold",
     width: "80%",
     fontSize: 25,
-    fontWeight: "600",
   },
   textSC: {
     fontSize: 17,

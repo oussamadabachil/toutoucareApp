@@ -51,10 +51,24 @@ const TabNavigator = () => {
       <Tab.Screen name="Calendrier" component={BookingScreen} />
       <Tab.Screen name="Messages" component={MessageScreen} />
       <Tab.Screen name="Factures" component={InvoicesScreen} />
-      <Tab.Screen name="Profils" component={ProfilScreen} />
     </Tab.Navigator>
   );
 };
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {

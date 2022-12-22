@@ -10,45 +10,44 @@ const User = require("../models/users");
 const Booking = require("../models/booking");
 const Dog = require("../models/dogs");
 const bcrypt = require("bcrypt");
+const { Router, response } = require("express");
 
 // Création de la DB dans Mongoose
 
 router.post("/all", (req, res) => {
- db.map(async(data) => {
+  db.map(async (data) => {
+    const hash = bcrypt.hashSync(data.password, 10);
+    const newUser = new User({
+      code_creche: data.code_creche,
+      nom: data.nom,
+      prenom: data.prenom,
+      chien: data.chien,
+      date_de_naissance: data.date_de_naissance,
+      telephone: data.telephone,
+      email: data.email,
+      password: hash,
+      rue: data.rue,
+      code_postal: data.code_postal,
+      ville: data.ville,
+      profession: data.profession,
+      nom_contact_urgence: data.nom_contact_urgence,
+      tel_contact_urgence: data.tel_contact_urgence,
+      token: uid2(32),
+    });
 
-      const hash = bcrypt.hashSync(data.password, 10);
-      const newUser = new User({
-        code_creche: data.code_creche,
-        nom: data.nom,
-        prenom: data.prenom,
-        chien: data.chien,
-        date_de_naissance: data.date_de_naissance,
-        telephone: data.telephone,
-        email: data.email,
-        password: hash,
-        rue: data.rue,
-        code_postal:data.code_postal,
-        ville: data.ville,
-        profession: data.profession,
-        nom_contact_urgence: data.nom_contact_urgence,
-        tel_contact_urgence: data.tel_contact_urgence,
-        token: uid2(32),
-      });
+    let userSaved = await newUser.save();
+  });
+  res.json({ result: true }),
+    newUser.save().then(() => {
+      res.json({ result: true, token: newUser.token });
+    });
 
-        let userSaved = await newUser.save()
-          
-        })
-        res.json({result : true}),
-      newUser.save().then(() => {
-        res.json({ result: true, token: newUser.token });
-      });
-      
-      // } else {
-      //     User already exists in database
-      //     res.json({ result: false, error: "User already exists" });
-      //   }
+  // } else {
+  //     User already exists in database
+  //     res.json({ result: false, error: "User already exists" });
+  //   }
 });
-  
+
 // //ajout d'une route Toutou
 // const newDog = new Dog({
 //   name: req.body.name,
@@ -107,7 +106,7 @@ router.post("/signin", (req, res) => {
       res.json({
         result: false,
         error:
-        "L'utilisateur n'a pas été trouvé ou mauvais mot de passe (code crèche inclus)",
+          "L'utilisateur n'a pas été trouvé ou mauvais mot de passe (code crèche inclus)",
       });
     }
   });
@@ -115,7 +114,7 @@ router.post("/signin", (req, res) => {
 
 router.get("/all", (req, res) => {
   User.find({}).then((data) => {
-    console.log(data)
+    console.log(data);
     if (data) {
       res.json({
         data: data,
@@ -124,15 +123,10 @@ router.get("/all", (req, res) => {
   });
 });
 
-
-
-*/
-
 router.get("/all/:email", (req, res) => {
   User.findOne({
-
     email: { $regex: new RegExp(req.params.email, "i") },
-  }).then(data => {
+  }).then((data) => {
     if (data) {
       res.json({ result: true, user: data });
     } else {
@@ -143,24 +137,26 @@ router.get("/all/:email", (req, res) => {
 
 router.put("/modify/:email", (req, res) => {
   User.updateOne(
-    {email: { $regex: new RegExp(req.params.email, "i") }},
-    {$set:{
-      nom: req.body.nom,
-      prenom: req.body.prenom,
-      chien: req.body.chien,
-      date_de_naissance: req.body.date_de_naissance,
-      telephone: req.body.telephone,
-      rue: req.body.rue,
-      code_postal: req.body.code_postal,
-      ville: req.body.ville,
-      profession: req.body.profession,
-      nom_contact_urgence: req.body.nom_contact_urgence,
-      tel_contact_urgence: req.body.tel_contact_urgence,
-    }}
+    { email: { $regex: new RegExp(req.params.email, "i") } },
+    {
+      $set: {
+        nom: req.body.nom,
+        prenom: req.body.prenom,
+        chien: req.body.chien,
+        date_de_naissance: req.body.date_de_naissance,
+        telephone: req.body.telephone,
+        rue: req.body.rue,
+        code_postal: req.body.code_postal,
+        ville: req.body.ville,
+        profession: req.body.profession,
+        nom_contact_urgence: req.body.nom_contact_urgence,
+        tel_contact_urgence: req.body.tel_contact_urgence,
+      },
+    }
   ).then(() => {
     res.json({ result: true });
-  })
-})
+  });
+});
 
 /*router.delete("/delete/:idUser/:date/:idDog", (req, res) => {
   Booking.deleteOne({
@@ -184,7 +180,6 @@ router.put("/modify/:email", (req, res) => {
 });*/
 
 //faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
-
 
 //ro
 //add booking to user
@@ -229,17 +224,16 @@ router.put("/dataBooking/:token/:date", (req, res) => {
   });
 });
 
-
 router.get("/booking/info/:token/:date", (req, res) => {
   Booking.findOne({ idToken: req.params.token, date: req.params.date }).then(
     (data) => {
-
-
-      if(data === null) {
-        res.json({ result: false, message: "Vous n'avez pas de réservation pour cette date" });
-      }else{
-      
-      res.json({ result: true, data: data });
+      if (data === null) {
+        res.json({
+          result: false,
+          message: "Vous n'avez pas de réservation pour cette date",
+        });
+      } else {
+        res.json({ result: true, data: data });
       }
     }
   );
@@ -285,6 +279,16 @@ router.get("/allBookingPerUser/:token", (req, res) => {
 
 //route qui permet d'afficher que les dates de réservation
 
+router.get("/findUserTokenByDate/:date", (req, res) => {
+  Booking.find({ date: req.params.date }).then((data) => {
+    if (data) {
+      res.json({
+        data,
+      });
+    }
+  });
+});
+
 router.get("/allBookingDuplicate", (req, res) => {
   Booking.find({}).then((data) => {
     if (data) {
@@ -314,8 +318,6 @@ router.get("/count/:date", (req, res) => {
 //   });
 // });
 
-
-
 router.get("/all/:email", (req, res) => {
   User.findOne({
     email: { $regex: new RegExp(req.params.email, "i") },
@@ -327,7 +329,6 @@ router.get("/all/:email", (req, res) => {
     }
   });
 });
-
 
 // router.post("/signin", (req, res) => {
 //   if (!checkBody(req.body, ["email", "password"])) {
@@ -357,8 +358,6 @@ router.get("/all/:email", (req, res) => {
 //     }
 //   });
 // });
-
-
 
 router.get("/booking/:idUser", (req, res) => {
   console.log(req.params.idUser);
@@ -404,5 +403,21 @@ router.delete("/delete/:idUser/:date/", (req, res) => {
 });*/
 
 //faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
+
+//faire une route qui permet de récupérer les dates réservées par token
+
+router.get("/allDatePerToken/:token", (req, res) => {
+  const dateReservedByUser = []
+  Booking.find({
+    userToken: req.params.token,
+  }).then((data) => { 
+    dateReservedByUser.push(data)
+    res.json({
+      data: data,
+    });
+
+    console.log(dateReservedByUser)
+  });
+});
 
 module.exports = router;
