@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
-const db = require("../database/users");
+const dbUser = require("../database/users");
+const dbDog = require("../database/dogs");
 
 require("../models/connection");
 var router = express.Router();
@@ -12,84 +13,43 @@ const Dog = require("../models/dogs");
 const bcrypt = require("bcrypt");
 const { Router, response } = require("express");
 
-// Création de la DB dans Mongoose
+//USERS
+// Création de la DB USER dans Mongoose
 
 router.post("/all", (req, res) => {
-  db.map(async (data) => {
-    const hash = bcrypt.hashSync(data.password, 10);
-    const newUser = new User({
-      code_creche: data.code_creche,
-      nom: data.nom,
-      prenom: data.prenom,
-      chien: data.chien,
-      date_de_naissance: data.date_de_naissance,
-      telephone: data.telephone,
-      email: data.email,
-      password: hash,
-      rue: data.rue,
-      code_postal: data.code_postal,
-      ville: data.ville,
-      profession: data.profession,
-      nom_contact_urgence: data.nom_contact_urgence,
-      tel_contact_urgence: data.tel_contact_urgence,
-      token: uid2(32),
-    });
+ dbUser.map(async(data) => {
 
-    let userSaved = await newUser.save();
-  });
-  res.json({ result: true }),
-    newUser.save().then(() => {
-      res.json({ result: true, token: newUser.token });
-    });
+      const hash = bcrypt.hashSync(data.password, 10);
+      const newUser = new User({
+        code_creche: data.code_creche,
+        nom: data.nom,
+        prenom: data.prenom,
+        chien: data.chien,
+        date_de_naissance: data.date_de_naissance,
+        telephone: data.telephone,
+        email: data.email,
+        password: hash,
+        rue: data.rue,
+        code_postal:data.code_postal,
+        ville: data.ville,
+        profession: data.profession,
+        nom_contact_urgence: data.nom_contact_urgence,
+        tel_contact_urgence: data.tel_contact_urgence,
+        token: uid2(32),
+        imageUri:"",
+      });
 
-  // } else {
-  //     User already exists in database
-  //     res.json({ result: false, error: "User already exists" });
-  //   }
+        let userSaved = await newUser.save()
+          
+        })
+        res.json({result : true});
+      
+      // } else {
+      //     User already exists in database
+      //     res.json({ result: false, error: "User already exists" });
+      //   }
 });
-
-// //ajout d'une route Toutou
-// const newDog = new Dog({
-//   name: req.body.name,
-//   surnoms: req.body.surnom,
-//   date_de_naissanceDog: req.body.date_de_naissanceDog,
-//   genre: req.body.genre,
-//   race: req.body.race,
-//   Sterilisation: req.body.Sterilisation,
-//   sante: req.body.sante,
-//   caractere: req.body.caractere,
-//   mesententes_chiens: req.body.mesententes_chiens,
-//   entente_chats: req.body.entente_chats,
-//   entente_enfants: req.body.entente_enfanst,
-//   habitudes: req.body.habitudes,
-//   peurs: req.body.peurs,
-//   _idUser: newUser._id,
-// });
-// newDog.save().then(() => {
-//   res.json({ result: true, token: newDog.token });
-// });
-// router.post("/signup", (req, res) => {
-//   if (!checkBody(req.body, ["email", "password"])) {
-//     res.json({ result: false, error: "Missing or empty fields" });
-//     return;
-//   }
-
-//   // Check if the user has not already been registered
-//   User.findOne({ email: req.body.email }).then((data) => {
-//     if (data === null) {
-
-//       });
-
-//       newUser.save().then((newDoc) => {
-//         res.json({ result: true, token: newDoc.token });
-//       });
-//     } else {
-//       // User already exists in database
-//       res.json({ result: false, error: "User already exists" });
-//     }
-//   });
-// });
-
+  
 router.post("/signin", (req, res) => {
   if (!checkBody(req.body, ["email", "password", "codeCreche"])) {
     res.json({ result: false, error: "Veuillez remplir tous les champs" });
@@ -155,33 +115,93 @@ router.put("/modify/:email", (req, res) => {
     }
   ).then(() => {
     res.json({ result: true });
-  });
-});
+  })
+})
 
-/*router.delete("/delete/:idUser/:date/:idDog", (req, res) => {
-  Booking.deleteOne({
-    user: req.params.idUser,
-    date: req.params.date,
-    dog: req.params.idDog,
-  }).then((data) => {
-    if (data) {
-      res.json({ data: data, result: true });
-    }
-  });
-}); */
-/*router.get("/code_creche/:token", (req, res) => {
-  User.findOne({ token: req.params.token }).then((data) => {
-    if (data) {
-      res.json({ result: true, codeCreche: data.codeCreche });
-    } else {
-      res.json({ result: false, error: "User not found" });
-    }
-  });
-});*/
+// DOGS
+// ===================================================================
+// Création de la DB dogs dans Mongoose
 
-//faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
+router.get("/add", async(req, res) => {
+  let users =  await User.find();
 
-//ro
+  users.map(async(data) => {
+    let dogFind =  await dbDog.find(element => {
+     return element.nom === data.chien
+    }); 
+
+      const newDog = new Dog({
+        user: data.id,
+        nom: dogFind.nom,
+        surnoms: dogFind.surnoms,
+        date_de_naissance: dogFind.date_de_naissance,
+        genre: dogFind.genre,
+        race: dogFind.race,
+        Sterilisation: dogFind.Sterilisation,
+        sante: dogFind.sante,
+        caractere: dogFind.caractere,
+        mesententes_chiens: dogFind.mesententes_chiens,
+        entente_chats: dogFind.entente_chats,
+        entente_enfants: dogFind.entente_enfants,
+        habitudes: dogFind.habitudes,
+        peurs: dogFind.peurs,
+      })
+          
+    let dogSaved = await  newDog.save();
+
+    })
+      res.json({result : true})
+  
+  });
+
+
+  router.get("/dogs", (req, res) => {
+    Dog.find({}).then((data) => {
+      if (data) {
+        res.json({
+          data
+        });
+      }
+    });
+  });
+
+  router.get("/dogs/:user", (req, res) => {
+    Dog.findOne({user: req.params.user}).then(data => {
+      if (data) {
+        res.json({ result: true, dog: data });
+      } else {
+        res.json({ result: false, error: "Dog not found" });
+      }
+    });
+  });
+
+  router.put("/dogs/modify/:user", (req, res) => {
+    Dog.updateOne(
+      {dogId: req.params._id},
+      {$set:{
+        nom: req.body.nom,
+        surnoms: req.body.surnoms,
+        date_de_naissance: req.body.date_de_naissance,
+        genre: req.body.genre,
+        race: req.body.race,
+        Sterilisation: req.body.Sterilisation,
+        sante: req.body.sante,
+        caractere: req.body.caractere,
+        mesententes_chiens: req.body.mesententes_chiens,
+        entente_chats: req.body.entente_chats,
+        entente_enfants: req.body.entente_enfants,
+        habitudes: req.body.habitudes,
+        peurs: req.body.peurs,
+      }}
+    ).then(() => {
+      res.json({ result: true });
+    })
+  })
+
+//====================================================================
+
+//BOOKINGS
+
 //add booking to user
 router.post("/add/:token/", (req, res) => {
   //check if user already have a booking for this date
