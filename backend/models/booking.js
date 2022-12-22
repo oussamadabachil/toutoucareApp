@@ -16,3 +16,7 @@ const Booking = mongoose.model("bookings", bookingSchema);
 
 module.exports = Booking;
 //foreing key with poeple
+
+
+//useEffect(() => {
+    
