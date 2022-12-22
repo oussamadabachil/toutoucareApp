@@ -30,14 +30,6 @@ import {
 import { useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-// // import DocumentPicker, { types } from 'react-native-document-picker';
-// import * as DocumentPicker from "expo-document-picker";
-// import { SelectList } from "react-native-dropdown-select-list";
-// import * as FileSystem from 'expo-file-system';
-// import { WebView } from 'react-native-webview';
-// import { Document } from 'react-pdf';
-// const { downloadAsync, documentDirectory } = FileSystem;
-
 export default function InvoicesScreen() {
   const source = {
     uri: "http://samples.leanpub.com/thereactnativebook-sample.pdf",
@@ -48,38 +40,7 @@ export default function InvoicesScreen() {
   const [dateTo, setDateTo] = useState(new Date());
   const userToken = useSelector((state) => state.user.value.data.token);
   const userNom = useSelector((state) => state.user.value.data.nom);
-  const ip = "192.168.10.170";
-  /*const [fileResponse, setFileResponse] = useState([]);
-
-  const handleDocumentSelection = useCallback(async () => {
-    try {
-      const response = await DocumentPicker.pick({
-        presentationStyle: 'fullScreen',
-        type: [types.pdf],
-        allowMultiSelection: true,
-      });
-      setFileResponse(response);
-    } catch (err) {
-      console.warn(err);
-    }
-  }, []);*/
-
-  /*const uri = FileSystem.documentDirectory+result.name;
-
-await FileSystem.copyAsync({
-   from: result.uri,
-   to: uri
-})*/
-
-  /*let _pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({
-      type: "application/pdf",
-      multiple: true,
-      copyToCacheDirectory: false,
-    });
-
-    console.log(result.uri);
-  };*/
+  const ip = "192.168.10.155";
 
   let pdfUrl = "https://www.orimi.com/pdf-test.pdf";
   //download pdf
@@ -349,7 +310,7 @@ await FileSystem.copyAsync({
     } else {
       return (
         <View style={styles.listFactures}>
-          <Text style={styles.textNoDispo}>Aucunes factures disponibles</Text>
+          <Text style={styles.textNoDispo}>Aucune facture disponible</Text>
         </View>
       );
     }

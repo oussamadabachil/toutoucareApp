@@ -1,14 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native';
-import UserProfile from './screens/UserProfile';
-import DogProfile from './screens/DogProfile';
+import React from 'react';
+import { StyleSheet, Text, View, Image,ScrollView, SafeAreaView, Pressable,TouchableOpacity, Switch } from 'react-native';
+import { useEffect, useState } from 'react';
+import UserProfile from './UserProfile';
+import DogProfile from './DogProfile';
 import * as ImagePicker from 'expo-image-picker';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
+import UploadImage from './UploadImage';
+import { useSelector } from "react-redux";
+
+const BACKEND_ADDRESS = "http://192.168.10.155";
 
 export default function ProfilScreen() {
 
   const [image, setImage] = useState(null);
   const userToken = useSelector((state) => state.user.value.data.token)
   const IMAGE_PATH = `https://res.cloudinary.com/dpapzrkqw/image/upload/v1671611852/toutouCare/${userToken}`;
-  let imageDeProfile;
+  let imageDeProfil;
 
   const formData = new FormData();
   let result = false;
@@ -46,10 +54,17 @@ export default function ProfilScreen() {
   }
 
   if (image) {
-    imageDeProfile = <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
+    imageDeProfil = <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
   } else {
-    imageDeProfile = <Image source={{ uri: IMAGE_PATH }} style={{ width: 100, height: 100 }} />
+    imageDeProfil = <Image source={{ uri: IMAGE_PATH }} style={{ width: 100, height: 100 }} />
   }
+
+    /*Check si le switch est actif ou non*/
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => {
+      setIsEnabled(previousState => !previousState);
+    };
+    const user = useSelector((state) => state.user.value);
 
   return (
     <View style={styles.photoNameContainer}>
@@ -57,7 +72,7 @@ export default function ProfilScreen() {
       <ScrollView>
       <View style={styles.header}> 
         <Pressable onPress={pickImage} style={styles.container}>
-          {imageDeProfile}
+          {imageDeProfil}
         </Pressable>
       </View>
       <View style={styles.main}>
@@ -67,7 +82,7 @@ export default function ProfilScreen() {
                 </TouchableOpacity>
               </View>
         <View style={styles.photoNameContainer}>
-            <UploadImage/>
+            
             <View style={styles.welcome}>
             <Text style={styles.profilNameText}>Bienvenue</Text>
             <Text style={styles.profilNameText}>{user.data.chien} et {user.data.prenom}</Text>

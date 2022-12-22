@@ -1,13 +1,3 @@
-import { useState, useEffect } from "react";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import RNHTMLtoPDF from "react-native-html-to-pdf";
-import { PDFView, PDFDownloadLink } from 'react-native-pdf-lib';
-
-
-import RNPrint from "react-native-print";
-import HTML from "react-native-render-html";
-
-//push
 import {
   Alert,
   TouchableHighlight,
@@ -22,26 +12,17 @@ import {
   Image,  
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useFonts, Montserrat_600Black } from '@expo-google-fonts/montserrat';
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { login, collectData } from "../reducers/user";
-
-
-
-const BACKEND_ADDRESS = "http://192.168.10.170";
 import { useFonts } from "expo-font";
+
+
+
+const BACKEND_ADDRESS = "http://192.168.10.155";
 
 export default function LoginScreen({ navigation }) {
   // let [fontsLoaded] = useFonts({Montserrat_600Black});
-
-
-const data = {
-  name: 'Divyesh Barad',
-  email: 'divyesh@gmail.com',
-  address: 'Rajkot',
-}
-
 
   const dispatch = useDispatch();
 
