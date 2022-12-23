@@ -12,16 +12,22 @@ import {
   Image,  
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useState } from "react";
+import { useState  , useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { collectData } from "../reducers/user";
 import { useFonts } from "expo-font";
 
 
 
-const BACKEND_ADDRESS = "http://192.168.10.140";
+const BACKEND_ADDRESS = "http://192.168.10.182";
 
 export default function LoginScreen({ navigation }) {
+
+
+  useEffect(() => {
+    console.disableYellowBox = true;
+  }, [])
+  
 
   const dispatch = useDispatch();
 
@@ -144,20 +150,23 @@ const styles = StyleSheet.create({
     padding:10,
   },
   TitleContent : {
+
     justifyContent: 'space-between',
     padding: 8,
     flexDirection:'row',
     alignItems:'center'
   },
   title : {
-    // fontFamily: "Montserrat_600",
     fontSize: 30,
     paddingHorizontal : 5,
+    fontFamily:"SemiBold",
     color : "#365B58",
+
   },
   contentText : {
-    // fontFamily: "Montserrat_600",
     fontSize: 15,
+    marginTop:12,
+    marginBottom:12,
     fontStyle:"italic",
     paddingHorizontal : 5,
     alignSelf: "center",
@@ -186,6 +195,7 @@ const styles = StyleSheet.create({
   },
 
   textVerifMail: {
+    fontFamily:"Bold",
     textAlign: "center",
     color: "#F12054",
     fontSize: 17,
@@ -263,6 +273,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   textSC: {
+    fontFamily:"Bold",
     fontSize: 17,
     fontWeight: "700",
   },

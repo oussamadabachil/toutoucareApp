@@ -22,7 +22,7 @@ import {
 
 import { useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-const BACKEND_ADDRESS = 'http://192.168.10.140';
+const BACKEND_ADDRESS = 'http://192.168.10.182';
 
 export default function InvoicesScreen() {
   const source = {
@@ -93,7 +93,7 @@ export default function InvoicesScreen() {
   useEffect(() => {
     console.log(userToken);
 
-    fetch(`http://${ip}:3000/invoices/getInvoices/${userToken}`)
+    fetch(`${BACKEND_ADDRESS}:3000/invoices/getInvoices/${userToken}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
@@ -341,7 +341,7 @@ export default function InvoicesScreen() {
           <View style={styles.headerContainer}>
             <Image
               style={styles.profilPicture}
-              source={require("../assets/oussama2.jpeg")}
+              source={require("../assets/chiencoralie.png")}
             ></Image>
 
             <Text style={styles.titleHead}>Vos factures</Text>

@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   headerText: {
+    fontFamily:"Bold",
     fontSize: 20,
     fontWeight: '500',
     marginLeft: 10,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: '100%',
-    height: 60,
+  
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -158,10 +159,11 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   textBouton: {
+    fontFamily:"SemiBold",
     fontSize: 18,
   },
   navigation: {
-    height: '10%',
+    height:12,
     width: '100%',
   }
 })

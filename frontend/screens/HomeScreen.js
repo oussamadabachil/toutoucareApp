@@ -21,7 +21,7 @@ import { faPenToSquare, faPowerOff } from "@fortawesome/free-solid-svg-icons/";
 import { faCircleXmark, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-const BACKEND_ADDRESS = 'http://192.168.10.140';
+const BACKEND_ADDRESS = "http://192.168.10.182";
 
 export default function HomeScreen({ navigation }) {
   const userToken = useSelector((state) => state.user.value.data.token);
@@ -42,6 +42,9 @@ export default function HomeScreen({ navigation }) {
   };
 
 
+useEffect(() => {
+  console.disableYellowBox = true;
+}, [])
 
   useEffect(() => {
     if (!user.token) {
@@ -62,7 +65,6 @@ export default function HomeScreen({ navigation }) {
       });
   }, []);
 
-
   const deleteResa = () => {
     fetch(
       `${BACKEND_ADDRESS}:3000/bookings/delete/${userToken}/${selectedDate}`,
@@ -80,12 +82,8 @@ export default function HomeScreen({ navigation }) {
           Alert.alert(
             "Réservation annulée",
             "Vous avez annulé votre réservation",
-            [
-              { text: "Parfait",
-                onPress: () => actualiser(),
-                style: "cancel",
-              },
-            ]);
+            [{ text: "Parfait", onPress: () => actualiser(), style: "cancel" }]
+          );
         } else {
           Alert.alert(`${json.message}`);
         }
@@ -101,7 +99,7 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity
               onPress={() => {
                 setModalDelete(true);
-                setSelectedDate(data)
+                setSelectedDate(data);
               }}
               style={styles.buttonTrash}
             >
@@ -158,80 +156,101 @@ export default function HomeScreen({ navigation }) {
 
       <SafeAreaView style={styles.container}>
         <ScrollView>
-          <View style={styles.photoNameContainer}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity onPress={()=>{
+              setModalVisible(true)}}>
+              <Image
+                style={styles.profilPicture}
+                source={require("../assets/chiencoralie.png")}
+              ></Image>
+            </TouchableOpacity>
+
             <View>
-              <TouchableOpacity
+              <Text style={styles.titleHead}>Bienvenue </Text>
+              <Text style={styles.titleHead}>
+                {user.chien} et {user.prenom} !
+              </Text>
+            </View>
+          </View>
+
+          {/* <View style={styles.welcome}> */}
+          {/* <TouchableOpacity
+
                 onPress={() => setModalVisible(true)}
                 style={{ width: "80%" }}
                 activeOpacity={0.8}
               >
                 <Image
                   style={styles.imageContainer}
-                  source={{ url: user.photo}}
+                  source={{ url: user.photo }}
                 />
               </TouchableOpacity>
-            </View>
-            <View style={styles.welcome}>
-              <Text style={styles.profilNameText}>Bienvenue </Text>
+
               <Text style={styles.profilNameText}>
+                Bienvenue
                 {user.chien} et {user.prenom} !
-              </Text>
-            </View>
-            <View style={styles.modalPosition}>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                setModalVisible(!modalVisible)}}
-              >
-                <View style={styles.modalPosition}>
-                  <View style={styles.modalView}>
-                    <View style={styles.closeModal}>
-                      <TouchableOpacity
-                        onPress={() => setModalVisible(!modalVisible)}
-                        style={styles.closeModal}
-                        activeOpacity={0.8}
-                      >
-                        <FontAwesomeIcon
-                          icon={faCircleXmark}
-                          size={25}
-                          color="#365B58"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.menuModal}>
+              </Text> */}
+          {/* </View> */}
+
+          <View style={styles.modalPosition}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.modalPosition}>
+                <View style={styles.modalView}>
+                  <View style={styles.closeModal}>
+                    <TouchableOpacity
+                      onPress={() => setModalVisible(!modalVisible)}
+                      style={styles.closeModal}
+                      activeOpacity={0.8}
+                    >
                       <FontAwesomeIcon
-                        icon={faPenToSquare}
-                        size={20}
-                        color="#008486"
-                        onPress={() => navigation.navigate("Profils")}
+                        icon={faCircleXmark}
+                        size={25}
+                        color="#365B58"
                       />
-                      <Text
-                        style={styles.modalText}
-                        onPress={() => navigation.navigate("Profils")}
-                      >
-                        Notre Profil
-                      </Text>
-                    </View>
-                    <View style={styles.menuModal}>
-                      <FontAwesomeIcon
-                        icon={faPowerOff}
-                        size={20}
-                        color="#FF5A5F"
-                        onPress={() => handleLogout()}
-                      />
-                      <Text
-                        style={styles.modalText}
-                        onPress={() => handleLogout()}
-                      >
-                        Se déconnecter
-                      </Text>
-                    </View>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.menuModal}>
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      size={20}
+                      color="#008486"
+                      onPress={() => {navigation.navigate("Profils")
+                      setModalVisible(!modalVisible)
+                    }}
+                    />
+                    <Text
+                      style={styles.modalText}
+                      onPress={() => {navigation.navigate("Profils")
+                      setModalVisible(!modalVisible)
+                    }}
+                    >
+                      Notre Profil
+                    </Text>
+                  </View>
+                  <View style={styles.menuModal}>
+                    <FontAwesomeIcon
+                      icon={faPowerOff}
+                      size={20}
+                      color="#FF5A5F"
+                      onPress={() => handleLogout()}
+                    />
+                    <Text
+                      style={styles.modalText}
+                      onPress={() => handleLogout()}
+                    >
+                      Se déconnecter
+                    </Text>
                   </View>
                 </View>
-              </Modal>
-            </View>
+              </View>
+            </Modal>
           </View>
           <View style={styles.insideContainer}>
             <Text style={styles.titleStyle}>Mes réservations</Text>
@@ -281,6 +300,17 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    marginTop: 20,
+    width: "90%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    flexShrink: "",
+  },
   viewModalM: {
     width: "90%",
     backgroundColor: "#008486",
@@ -316,6 +346,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  profilPicture: {
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+  },
+
+  titleHead: {
+    textAlign: "left",
+    lineHeight: 32,
+    marginLeft: 22,
+    fontFamily: "Bold",
+    fontSize: 19,
+    width: "100%",
+  },
+
   container: {
     flex: 1,
     backgroundColor: "#CFDBD5",
@@ -344,20 +389,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   imageContainer: {
-    position: "relative",
-  borderRadius: 999,
+    borderRadius: 999,
     overflow: "hidden",
     backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
     height: 100,
     width: 100,
   },
   welcome: {
-    alignSelf: "center",
+    backgroundColor: "red",
+    flexDirection: "row",
     justifyContent: "center",
-    maxWidth: 200,
-    marginRight: 30,
+    marginRight: "auto",
+    marginLeft: "auto",
+    width: "80%",
   },
   modalPosition: {
     flex: 1,

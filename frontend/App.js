@@ -16,14 +16,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import dog from "./reducers/dog";
 import { Provider as PaperProvider } from 'react-native-paper';
-
 const store = configureStore({
   reducer: { user, dog },
 });
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 const TabNavigator = () => {
   return (
