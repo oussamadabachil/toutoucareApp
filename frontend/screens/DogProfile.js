@@ -20,7 +20,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 
 
-const BACKEND_ADDRESS = 'http://192.168.10.155';
+const BACKEND_ADDRESS = 'http://192.168.10.182';
 
 export default function DogProfile() {
 

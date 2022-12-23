@@ -19,7 +19,7 @@ import { useFonts } from "expo-font";
 
 
 
-const BACKEND_ADDRESS = "http://192.168.10.155";
+const BACKEND_ADDRESS = "http://192.168.10.182";
 
 export default function LoginScreen({ navigation }) {
   // let [fontsLoaded] = useFonts({Montserrat_600Black});

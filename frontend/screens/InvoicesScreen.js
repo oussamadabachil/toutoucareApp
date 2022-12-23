@@ -40,7 +40,7 @@ export default function InvoicesScreen() {
   const [dateTo, setDateTo] = useState(new Date());
   const userToken = useSelector((state) => state.user.value.data.token);
   const userNom = useSelector((state) => state.user.value.data.nom);
-  const ip = "192.168.10.155";
+  const ip = "192.168.10.182";
 
   let pdfUrl = "https://www.orimi.com/pdf-test.pdf";
   //download pdf
