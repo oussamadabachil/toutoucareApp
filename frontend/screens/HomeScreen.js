@@ -21,13 +21,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare, faPowerOff } from '@fortawesome/free-solid-svg-icons/';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
-const BACKEND_ADDRESS = 'http://192.168.10.155';
+const BACKEND_ADDRESS = 'http://192.168.1.32';
 
 export default function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [bookedDates, setBookedDates] = useState([""]);
   const user = useSelector((state) => state.user.value.data);
   const dispatch = useDispatch();
+
+  const IMAGE_PATH = `https://res.cloudinary.com/dpapzrkqw/image/upload/v1671611852/toutouCare/${user.token}`;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -78,7 +80,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.photoNameContainer}>
         <View>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={{width:'80%'}} activeOpacity={0.8}>
-          <Image style={styles.imageContainer} source={require('../assets/oussama1.jpg')}/>
+          <Image style={styles.imageContainer} source={{ url: user.photo}}/>
         </TouchableOpacity>
 
         </View>
@@ -90,11 +92,13 @@ export default function HomeScreen({ navigation }) {
           <Modal
             animationType="slide"
             transparent={true}
-            visible={modalVisible}>
+            visible={modalVisible}
+            onRequestClose={() => {
+            setModalVisible(!modalVisible)}}>
           <View style={styles.modalPosition}>
             <View style={styles.modalView}>
               <View style={styles.closeModal}>
-                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModal} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.closeModal} activeOpacity={0.8}>
                   <FontAwesomeIcon icon={faCircleXmark} size={25}  color="#365B58"/>
                 </TouchableOpacity>
               </View>

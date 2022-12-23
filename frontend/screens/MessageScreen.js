@@ -48,19 +48,19 @@ export default function ProfilScreen() {
         <View style={styles.messageContainer}>
           <FontAwesomeIcon size={30} icon={faPaw} color={'#D2B87F'}/> 
           <View style={styles.bulleContainer}>
-            <Text style={styles.textBouton}>Bonjour Manon! Comment vas-tu? Juste pour te prévenir que Rantanplan va beaucoup mieux!</Text>
+            <Text style={styles.textBouton}>Bonjour Coralie!{ '\n'}Sally s'est fait un nouvel ami, elle n'a pas arrêté de jouer avec le même toutou aujourd'hui!</Text>
           </View>
         </View>
         <View style={styles.messageUserContainer}>
           <View style={styles.bulleUserContainer}>
-            <Text style={styles.textBouton}>Bonjour Joe, english please, I am american motherfucker!</Text>
+            <Text style={styles.textBouton}>Coucou Joe, { '\n'}adorable 😊😊😊😊 Comment il s'appelle? </Text>
           </View>
           <FontAwesomeIcon size={30} icon={faPaw} color={'#A3C6C7'}/> 
         </View>
         <View style={styles.messageContainer}>
           <FontAwesomeIcon size={30} icon={faPaw} color={'#D2B87F'}/> 
           <View style={styles.bulleContainer}>
-            <Text style={styles.textBouton}>Son coup de moue de ce matin est partis! Il gambade dans la prairie maintenant!</Text>
+            <Text style={styles.textBouton}>Rio un beau Border Collie 😉 { '\n'} elle sera épuisée ce soir quand tu vas la récupérer.</Text>
           </View>
         </View>
         {newMessage}

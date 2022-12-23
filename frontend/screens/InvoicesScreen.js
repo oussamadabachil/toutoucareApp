@@ -29,6 +29,7 @@ import {
 
 import { useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+const BACKEND_ADDRESS = 'http://192.168.1.32';
 
 export default function InvoicesScreen() {
   const source = {
@@ -39,8 +40,8 @@ export default function InvoicesScreen() {
   const [dateFrom, setDateFrom] = useState(new Date());
   const [dateTo, setDateTo] = useState(new Date());
   const userToken = useSelector((state) => state.user.value.data.token);
-  const userNom = useSelector((state) => state.user.value.data.nom);
-  const ip = "192.168.10.155";
+  const user = useSelector((state) => state.user.value.data);
+
 
   let pdfUrl = "https://www.orimi.com/pdf-test.pdf";
   //download pdf
@@ -74,7 +75,7 @@ export default function InvoicesScreen() {
   console.log("userToken", dateTo);
 
   const findInovices = () => {
-    fetch(`http://${ip}:3000/invoices/${dateFrom}/${dateTo}/${userToken}`, {
+    fetch(`${BACKEND_ADDRESS}:3000/invoices/${dateFrom}/${dateTo}/${userToken}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -124,7 +125,7 @@ export default function InvoicesScreen() {
     <body>
     <h1>TouTouCareApp</h1>
         <h2>Facture du <span>${data.date.split("T")[0]}</span></h2>
-        <h4>Bonjour ${userNom}</h4>
+        <h4>Bonjour ${user.nom}</h4>
         <h4>Voici votre facture pour ce jour : <br>
         <span>${data.prix} €</span> </h4>
 
@@ -231,7 +232,7 @@ export default function InvoicesScreen() {
         <img src='./assets/logostyleompbre.png' alt="Logo" border="0">
         <h1>TouTouCareApp</h1>
             <h2>Facture du <span>${data.date.split("T")[0]}</span></h2>
-            <h4>Bonjour ${userNom}</h4>
+            <h4>Bonjour ${user.nom}</h4>
             <h4>Voici votre facture pour ce jour : <br>
             <span>${data.prix} €</span> </h4>
              <ul class="footer">
@@ -318,6 +319,7 @@ export default function InvoicesScreen() {
 
   return (
     <>
+    
       <Modal
         animationType="slide"
         transparent={false}
@@ -366,9 +368,7 @@ export default function InvoicesScreen() {
             <Text style={styles.titleMain}>Votre dernière facture</Text>
 
             <View style={styles.containerHistorique}>
-              {/* <ScrollView style={styles.scrollViewInvoices}> */}
               {displayedInvoices[0]}
-              {/* </ScrollView> */}
             </View>
 
             <View style={styles.bar}></View>
@@ -405,8 +405,7 @@ export default function InvoicesScreen() {
               style={styles.buttonSearch}
               onPress={() => {
                 findInovices();
-              }}
-            >
+              }}>
               <Text style={styles.buttonText}>Rechercher</Text>
               <FontAwesome
                 name="search"
@@ -416,26 +415,6 @@ export default function InvoicesScreen() {
               ></FontAwesome>
             </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity style={styles.button} onPress={downloadPdf}>
-        <Text style={styles.textButton}>Télécharger la facture</Text>
-      </TouchableOpacity>
-
-      <Text>Historique des factures</Text>
-
-      <Text>Période :</Text>
-      <Text>De :</Text> */}
-          {/* <SelectList
-        setSelected={(val) => setSelected(val)}
-        data={data}
-        save="value"
-      /> */}
-
-          {/* <Text>A :</Text> */}
-          {/* <SelectList
-        setSelected={(val) => setSelected(val)}
-        data={data}
-        save="value"
-      /> */}
         </ScrollView>
       </SafeAreaView>
     </>
