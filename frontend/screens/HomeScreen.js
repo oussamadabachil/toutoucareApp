@@ -60,7 +60,7 @@ export default function HomeScreen({ navigation }) {
           setBookedDates(arrayDate);
         }
       });
-  }, [bookedDates]);
+  }, []);
 
 
   const deleteResa = () => {
@@ -105,7 +105,7 @@ export default function HomeScreen({ navigation }) {
               }}
               style={styles.buttonTrash}
             >
-              <FontAwesomeIcon icon={faTrashCan} size="20" color="#F12054" />
+              <FontAwesomeIcon icon={faTrashCan} size={20} color="#F12054" />
             </TouchableOpacity>
           </View>
         </>
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   },
 
   buttonTrash: {
-    borderRadius: "100%",
+    borderRadius: 100,
     backgroundColor: "white",
     padding: 3,
   },
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: "relative",
-    borderRadius: 999,
+  borderRadius: 999,
     overflow: "hidden",
     backgroundColor: "#ffffff",
     alignItems: "center",
