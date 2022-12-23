@@ -394,7 +394,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   insideContainer: {
-    height: 200,
     backgroundColor: "white",
     borderWidth: 0.5,
     borderColor: "#365B58",
