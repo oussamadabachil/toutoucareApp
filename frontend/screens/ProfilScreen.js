@@ -9,9 +9,9 @@ import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import UploadImage from './UploadImage';
 import { useSelector } from "react-redux";
 
-const BACKEND_ADDRESS = "http://192.168.10.155";
+const BACKEND_ADDRESS = "http://192.168.10.163";
 
-export default function ProfilScreen() {
+export default function ProfilScreen({navigation}) {
 
   const [image, setImage] = useState(null);
   const userToken = useSelector((state) => state.user.value.data.token)
@@ -19,7 +19,7 @@ export default function ProfilScreen() {
   let imageDeProfil;
 
   const formData = new FormData();
-  let result = false;
+  let result;
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -33,7 +33,7 @@ export default function ProfilScreen() {
         aspect: [4, 3],
         quality: 1,
       });
-  
+      console.log(result.uri)
       if (!result.canceled) {
         setImage(result.assets[0].uri);
         formData.append('photoFromFront', {
@@ -70,19 +70,16 @@ export default function ProfilScreen() {
     <View style={styles.photoNameContainer}>
       <SafeAreaView style={styles.background}>
       <ScrollView>
-      <View style={styles.header}> 
-        <Pressable onPress={pickImage} style={styles.container}>
-          {imageDeProfil}
-        </Pressable>
-      </View>
       <View style={styles.main}>
       <View style={styles.close}>
-                <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.closeModal} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => navigation.navigate("Accueil")} style={styles.closeModal} activeOpacity={0.8}>
                   <FontAwesomeIcon icon={faCircleXmark} size={35} color="#365B58"/>
                 </TouchableOpacity>
               </View>
         <View style={styles.photoNameContainer}>
-            
+        <Pressable onPress={imageDeProfil} style={styles.profilContainer}>
+          <View style={styles.profilContainer}>{imageDeProfil}</View>
+        </Pressable>
             <View style={styles.welcome}>
             <Text style={styles.profilNameText}>Bienvenue</Text>
             <Text style={styles.profilNameText}>{user.data.chien} et {user.data.prenom}</Text>
@@ -123,12 +120,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageDeProfil: {
+    width: '100%',
+    height: 200,
+  },
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
   },
   iconProfil: {
     left: '330%',
+  },
+  icon: {
+    position: 'absolute',
+    left: 52,
+    top: 52,
+
   },
   main: {
     flex: 1,
@@ -271,6 +278,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 50,
-    
+  },
+  container: {
+    elevation:2,
+    height:100,
+    width:100,
+    backgroundColor:'#efefef',
+    position:'relative',
+    borderRadius:999,
+    overflow:'hidden',
+
   }
 })

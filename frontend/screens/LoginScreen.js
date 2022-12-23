@@ -19,7 +19,7 @@ import { useFonts } from "expo-font";
 
 
 
-const BACKEND_ADDRESS = "http://192.168.10.155";
+const BACKEND_ADDRESS = "http://192.168.10.163";
 
 export default function LoginScreen({ navigation }) {
   // let [fontsLoaded] = useFonts({Montserrat_600Black});
@@ -85,6 +85,7 @@ export default function LoginScreen({ navigation }) {
           value={email}
           style={styles.input}
           placeholder="Adresse email"
+          keyboardType={'email-address'}
           outlined
         />
       </View>

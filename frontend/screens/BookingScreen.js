@@ -106,7 +106,7 @@ export default function BookingScreen() {
     Bold: require("../assets/styles/Montserrat-Bold.ttf"),
   });
 
-  const ip = "192.168.10.170";
+  const ip = "192.168.10.155";
 
   const hoursA = [
     "09:00",
