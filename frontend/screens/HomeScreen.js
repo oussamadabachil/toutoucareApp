@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare, faPowerOff } from '@fortawesome/free-solid-svg-icons/';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
-const BACKEND_ADDRESS = 'http://192.168.1.32';
+const BACKEND_ADDRESS = 'http://192.168.10.140';
 
 export default function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);

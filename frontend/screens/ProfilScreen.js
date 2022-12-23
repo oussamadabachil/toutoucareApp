@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { useSelector, useDispatch } from "react-redux";
 
-const BACKEND_ADDRESS = "http://192.168.1.32";
+const BACKEND_ADDRESS = "http://192.168.10.140";
 
 export default function ProfilScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -79,7 +79,7 @@ export default function ProfilScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
         <View style={styles.photoNameContainer}>
-        <Pressable onPress={pickImage} style={styles.profilContainer}>
+        <Pressable onPress={imageDeProfil} style={styles.profilContainer}>
           <View style={styles.profilContainer}>{imageDeProfil}</View>
         </Pressable>
             <View style={styles.welcome}>

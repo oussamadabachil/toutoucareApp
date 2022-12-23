@@ -7,7 +7,6 @@ import {
   TouchableOpacity, 
   View, 
   TextInput, 
-  Switch, 
   KeyboardAvoidingView,
   Pressable
 } from 'react-native';
@@ -18,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 
 
-const BACKEND_ADDRESS = 'http://192.168.1.32';
+const BACKEND_ADDRESS = 'http://192.168.10.140';
 
 export default function UserProfile() {
 
@@ -27,10 +26,6 @@ export default function UserProfile() {
   const [userInfosBackup, setUserInfosBackup] = useState();
   const [editColor, setEditColor] = useState('white')
   
-
-  // /*Check si le switch est actif ou non*/
-  // const [isEnabled, setIsEnabled] = useState(false);
-  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const user = useSelector((state) => state.user.value);
   const [userInfos, setUserInfos] = useState([]);
@@ -122,31 +117,8 @@ export default function UserProfile() {
     setEditColor("white");
   }
 
-  // let profilName = "John Doe's profil";
-  // if (isEnabled) {
-  //   profilName = "Rantanplan's profil"
-  // }
-
   return (
     <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-      {/* <View style={styles.header}> 
-        <Text style={styles.titleText}>Profil</Text>
-      </View>
-      <View style={styles.main}>
-        <View style={styles.photoNameContainer}>
-          <UploadImage/>
-          <Text style={styles.profilNameText}>{profilName}</Text>
-          <View style={styles.switchContainer}>
-            <Switch
-              trackColor={{ false: "#767577", true: "#008486" }}
-              thumbColor={isEnabled ? "#FFC547" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
-        </View>
-        </View> */}
         <View style={styles.main}>
         <ScrollView>
             <Pressable 

@@ -19,7 +19,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { FontAwesome } from "@expo/vector-icons";
 const moment = require("moment");
 
-const BACKEND_ADDRESS = 'http://192.168.1.32';
+const BACKEND_ADDRESS = 'http://192.168.10.140';
 
 export default function BookingScreen() {
   const hours = [
