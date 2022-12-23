@@ -81,13 +81,11 @@ export default function HomeScreen({ navigation }) {
             "Réservation annulée",
             "Vous avez annulé votre réservation",
             [
-              {
-                text: "Parfait",
+              { text: "Parfait",
                 onPress: () => actualiser(),
                 style: "cancel",
               },
-            ]
-          );
+            ]);
         } else {
           Alert.alert(`${json.message}`);
         }
@@ -104,7 +102,6 @@ export default function HomeScreen({ navigation }) {
               onPress={() => {
                 setModalDelete(true);
                 setSelectedDate(data)
-                
               }}
               style={styles.buttonTrash}
             >
@@ -143,7 +140,6 @@ export default function HomeScreen({ navigation }) {
               />
             </TouchableOpacity>
             <Text style={styles.textResaM}>Réservation du {selectedDate}</Text>
-            {/* <Text style={styles.textResaM}> {selectedDate}</Text> */}
 
             <View style={styles.containerButtonsM}>
               <TouchableOpacity
@@ -159,6 +155,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.photoNameContainer}>
@@ -170,7 +167,7 @@ export default function HomeScreen({ navigation }) {
               >
                 <Image
                   style={styles.imageContainer}
-                  source={require("../assets/oussama1.jpg")}
+                  source={{ url: user.photo}}
                 />
               </TouchableOpacity>
             </View>
@@ -185,12 +182,14 @@ export default function HomeScreen({ navigation }) {
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
+                onRequestClose={() => {
+                setModalVisible(!modalVisible)}}
               >
                 <View style={styles.modalPosition}>
                   <View style={styles.modalView}>
                     <View style={styles.closeModal}>
                       <TouchableOpacity
-                        onPress={() => setModalVisible(false)}
+                        onPress={() => setModalVisible(!modalVisible)}
                         style={styles.closeModal}
                         activeOpacity={0.8}
                       >
@@ -206,11 +205,7 @@ export default function HomeScreen({ navigation }) {
                         icon={faPenToSquare}
                         size={20}
                         color="#008486"
-                        onPress={() => {
-                          setModalVisible(false);
-
-                          navigation.navigate("Profils");
-                        }}
+                        onPress={() => navigation.navigate("Profils")}
                       />
                       <Text
                         style={styles.modalText}
