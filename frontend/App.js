@@ -31,10 +31,10 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         
         tabBarIcon: ({ color, size }) => {
-          if (route.name === "Accueil") {
+           if (route.name === "Accueil") {
             return <Feather name = 'home' size ={size} color={color} />;
-          } 
-          else if (route.name === "Calendrier") {
+       
+        }else if (route.name === "Calendrier") {
             return <Feather name ='calendar' size={size} color={color} />;
           } 
           else if (route.name === "Messages") {
@@ -66,9 +66,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown:false}}>
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Profils" component={ProfilScreen} />
-          <Stack.Screen name="Calendrier" component={BookingScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

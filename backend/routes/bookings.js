@@ -1,16 +1,9 @@
 var express = require("express");
 var router = express.Router();
-const db = require("../database/users");
-
 require("../models/connection");
-var router = express.Router();
-const { checkBody } = require("../modules/checkBody");
-const uid2 = require("uid2");
-const User = require("../models/users");
+
 const Booking = require("../models/booking");
-const Dog = require("../models/dogs");
-const bcrypt = require("bcrypt");
-const { Router, response } = require("express");
+
 
 // Création de la DB dans Mongoose
 router.post("/add/:token/", (req, res) => {
@@ -68,36 +61,7 @@ router.post("/add/:token/", (req, res) => {
       }
     );
   });
-  /*
   
-  router.post("/add/:idUser/:idDog", (req, res) => {
-    //check if user already have a booking for this date
-    Booking.findOne({ user: req.params.idUser, date: req.body.date }).then(
-      (data) => {
-        if (data === null) {
-          const newBooking = new Booking({
-            date: req.body.date,
-            heureDeDepose: req.body.heureDeDepose,
-            heureDeRecuperation: req.body.heureDeRecuperation,
-            commentaire: req.body.commentaire,
-            idUser: req.params.idUser,
-            idDog: req.params.idDog,
-          });
-  
-          newBooking.save().then(() => {
-            res.json({ result: true });
-          });
-        } else {
-          res.json({
-            result: false,
-            message: "Vous avez déjà une réservation pour cette date",
-          });
-        }
-      }
-    );
-  });
-  
-  */
   
   router.get("/allBookingPerUser/:token", (req, res) => {
     Booking.find({ userToken: req.params.token }).then((data) => {
@@ -140,44 +104,6 @@ router.post("/add/:token/", (req, res) => {
     });
   });
   
-  // router.get("/allDogPerUser/:idUser", (req, res) => {
-  //   Dog.find({ _idUser: req.params.idUser }).then((data) => {
-  //     if (data) {
-  //       res.json({ data: data });
-  //     }
-  //   });
-  // });
-  
-  
-  
-  // router.post("/signin", (req, res) => {
-  //   if (!checkBody(req.body, ["email", "password"])) {
-  //     res.json({ result: false, error: "Missing or empty fields" });
-  //     return;
-  //   }
-  //   User.findOne({ email: req.body.email }).then((data) => {
-  //     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-  //       //if (data && req.body.password == data.password) {
-  //       res.json({ result: true, data });
-  //     } else {
-  //       res.json({ result: false, error: "User not found or wrong password" });
-  //     }
-  //   });
-  // });
-  // router.post("/signin", (req, res) => {
-  //   if (!checkBody(req.body, ["email", "password"])) {
-  //     res.json({ result: false, error: "Missing or empty fields" });
-  //     return;
-  //   }
-  //   User.findOne({ email: req.body.email }).then((data) => {
-  //     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-  //       //if (data && req.body.password == data.password) {
-  //       res.json({ result: true ,data});
-  //     } else {
-  //       res.json({ result: false, error: "User not found or wrong password" });
-  //     }
-  //   });
-  // });
   
   router.get("/booking/:idUser", (req, res) => {
     console.log(req.params.idUser);
@@ -198,45 +124,6 @@ router.post("/add/:token/", (req, res) => {
       if (data) {
         res.json({ data: data, result: true });
       }
-    });
-  });
-  
-  /*router.delete("/delete/:idUser/:date/:idDog", (req, res) => {
-    Booking.deleteOne({
-      user: req.params.idUser,
-      date: req.params.date,
-      dog: req.params.idDog,
-    }).then((data) => {
-      if (data) {
-        res.json({ data: data, result: true });
-      }
-    });
-  }); */
-  /*router.get("/code_creche/:token", (req, res) => {
-    User.findOne({ token: req.params.token }).then((data) => {
-      if (data) {
-        res.json({ result: true, codeCreche: data.codeCreche });
-      } else {
-        res.json({ result: false, error: "User not found" });
-      }
-    });
-  });*/
-  
-  //faire une route qui permet de poster sur la base de donnée le fichier json et modifier les
-  
-  //faire une route qui permet de récupérer les dates réservées par token
-  
-  router.get("/allDatePerToken/:token", (req, res) => {
-    const dateReservedByUser = []
-    Booking.find({
-      userToken: req.params.token,
-    }).then((data) => { 
-      dateReservedByUser.push(data)
-      res.json({
-        data: data,
-      });
-  
-      console.log(dateReservedByUser)
     });
   });
   

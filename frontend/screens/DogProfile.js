@@ -129,31 +129,8 @@ useEffect(() => {
     setEditColor("white");
   }
 
-  // let profilName = "John Doe's profil";
-  // if (isEnabled) {
-  //   profilName = "Rantanplan's profil"
-  // }
-
   return (
     <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-      {/* <View style={styles.header}> 
-        <Text style={styles.titleText}>Profil</Text>
-      </View>
-      <View style={styles.main}>
-        <View style={styles.photoNameContainer}>
-          <UploadImage/>
-          <Text style={styles.profilNameText}>{profilName}</Text>
-          <View style={styles.switchContainer}>
-            <Switch
-              trackColor={{ false: "#767577", true: "#008486" }}
-              thumbColor={isEnabled ? "#FFC547" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
-        </View>
-        </View> */}
         <View style={styles.main}>
         <ScrollView>
             <Pressable 

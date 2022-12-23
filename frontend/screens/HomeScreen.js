@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,17 +14,19 @@ import {
   ScrollView,
   Image,
 } from "react-native";
+import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { logout } from "../reducers/user";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare, faPowerOff } from '@fortawesome/free-solid-svg-icons/';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
+const BACKEND_ADDRESS = 'http://192.168.10.155';
+
 export default function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [bookedDates, setBookedDates] = useState("aucune réservation");
-  const user = useSelector((state) => state.user.value);
-  const dog = useSelector((state) => state.dog.value);
+  const [bookedDates, setBookedDates] = useState([""]);
+  const user = useSelector((state) => state.user.value.data);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -31,16 +34,43 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate("Login");
   };
 
-  // useEffect(() => {
-  //   if (!user.data.email) {
-  //     return;
-  //   }
-  //   fetch(`${BACKEND_ADDRESS}:3000/bookings`)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //         if (data.result) {setBookedDates(data};
-  //     });
-  // }, []);
+  useEffect(() => {
+    if (!user.token) {
+      return;
+    }
+    fetch(`${BACKEND_ADDRESS}:3000/bookings/allBookingPerUser/${user.token}`)
+      .then(response => response.json())
+      .then(bookings => {
+          if (bookings) {
+
+            const arrayDate = []
+
+            for(let i = 0;i<bookings.data.length;i++){
+
+              console.log(bookings.data[i].date)
+              arrayDate.push(bookings.data[i].date)
+            }
+            setBookedDates(arrayDate)
+          };
+          
+      });
+    }, []);
+
+
+    const displayDates = bookedDates.map((data,i)=>{
+
+      return (
+
+        <>
+
+        <Text>{data}</Text>
+        </>
+      )
+
+
+
+    })
+  
 
   return (
     <SafeAreaView style= {styles.container}>
@@ -54,7 +84,7 @@ export default function HomeScreen({ navigation }) {
         </View>
           <View style={styles.welcome}>
             <Text style={styles.profilNameText}>Bienvenue </Text>
-            <Text style={styles.profilNameText}>{user.data.chien} et {user.data.prenom} !</Text>
+            <Text style={styles.profilNameText}>{user.chien} et {user.prenom} !</Text>
           </View>
         <View style={styles.modalPosition}>
           <Modal
@@ -82,8 +112,8 @@ export default function HomeScreen({ navigation }) {
       </View>
       </View>
       <View style={styles.insideContainer}>
-            <Text style={styles.titleStyle}>BOOKINGS</Text>
-            <Text> {bookedDates}</Text> 
+            <Text style={styles.titleStyle}>Mes réservations</Text>
+            <Text> {displayDates}</Text> 
             <TouchableOpacity onPress={() => navigation.navigate("Calendrier")} style={styles.button} activeOpacity={0.8}>
               <Text style={styles.textButton}>Réserver</Text>
             </TouchableOpacity>
