@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { useSelector } from "react-redux";
 
-const BACKEND_ADDRESS = "http://192.168.10.155";
+const BACKEND_ADDRESS = "http://192.168.10.163";
 
 export default function ProfilScreen({ navigation }) {
 
@@ -18,7 +18,7 @@ export default function ProfilScreen({ navigation }) {
   let imageDeProfil;
 
   const formData = new FormData();
-  let result = false;
+  let result;
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -32,7 +32,7 @@ export default function ProfilScreen({ navigation }) {
         aspect: [4, 3],
         quality: 1,
       });
-  
+      console.log(result.uri)
       if (!result.canceled) {
         setImage(result.assets[0].uri);
         formData.append('photoFromFront', {
@@ -117,12 +117,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageDeProfil: {
+    width: '100%',
+    height: 200,
+  },
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
   },
   iconProfil: {
     left: '330%',
+  },
+  icon: {
+    position: 'absolute',
+    left: 52,
+    top: 52,
+
   },
   main: {
     flex: 1,
@@ -268,6 +278,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 50,
-    
+  },
+  container: {
+    elevation:2,
+    height:100,
+    width:100,
+    backgroundColor:'#efefef',
+    position:'relative',
+    borderRadius:999,
+    overflow:'hidden',
+
   }
 })

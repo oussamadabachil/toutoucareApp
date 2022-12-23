@@ -85,6 +85,7 @@ export default function LoginScreen({ navigation }) {
           value={email}
           style={styles.input}
           placeholder="Adresse email"
+          keyboardType={'email-address'}
           outlined
         />
       </View>

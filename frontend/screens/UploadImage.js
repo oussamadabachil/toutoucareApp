@@ -3,7 +3,7 @@ import { Image, View, Platform, TouchableOpacity, Text, StyleSheet, Pressable, B
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 
-const BACKEND_ADDRESS = 'http://192.168.10.170';
+const BACKEND_ADDRESS = 'http://192.168.1.12';
 
 export default function UploadImage() {
   const [image, setImage] = useState(null);
