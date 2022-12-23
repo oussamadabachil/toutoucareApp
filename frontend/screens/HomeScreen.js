@@ -21,7 +21,7 @@ import { faPenToSquare, faPowerOff } from "@fortawesome/free-solid-svg-icons/";
 import { faCircleXmark, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-const BACKEND_ADDRESS = "http://192.168.10.182";
+const BACKEND_ADDRESS = 'http://192.168.10.140';
 
 export default function HomeScreen({ navigation }) {
   const userToken = useSelector((state) => state.user.value.data.token);
@@ -33,6 +33,8 @@ export default function HomeScreen({ navigation }) {
   const [modalDelete, setModalDelete] = useState(false);
   const user = useSelector((state) => state.user.value.data);
   const dispatch = useDispatch();
+
+  const IMAGE_PATH = `https://res.cloudinary.com/dpapzrkqw/image/upload/v1671611852/toutouCare/${user.token}`;
 
   const handleLogout = () => {
     dispatch(logout());

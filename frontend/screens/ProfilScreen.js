@@ -6,12 +6,12 @@ import DogProfile from './DogProfile';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-const BACKEND_ADDRESS = "http://192.168.10.163";
+const BACKEND_ADDRESS = "http://192.168.10.140";
 
 export default function ProfilScreen({ navigation }) {
-
+  const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const userToken = useSelector((state) => state.user.value.data.token)
   const IMAGE_PATH = `https://res.cloudinary.com/dpapzrkqw/image/upload/v1671611852/toutouCare/${userToken}`;
@@ -48,6 +48,10 @@ export default function ProfilScreen({ navigation }) {
           },
           body: formData,
         }).then((response) => response.json())
+        .then((data) => { console.log(data)
+          dispatch(addPhoto(data.url));
+          console.log(data.url)
+        });
       }
     }
   }
@@ -55,7 +59,7 @@ export default function ProfilScreen({ navigation }) {
   if (image) {
     imageDeProfil = <Image source={{ uri: image }}  style={{ width: 100, height: 100, borderRadius:999 }} />
   } else {
-    imageDeProfil = <Image source={{ uri: IMAGE_PATH }} style={{ width: 100, height: 100, borderRadius:999 }} />
+    imageDeProfil = <Image source={{ url: IMAGE_PATH }} style={{ width: 100, height: 100, borderRadius:999 }} />
   }
 
     /*Check si le switch est actif ou non*/
@@ -75,7 +79,7 @@ export default function ProfilScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
         <View style={styles.photoNameContainer}>
-        <Pressable onPress={pickImage} style={styles.profilContainer}>
+        <Pressable onPress={imageDeProfil} style={styles.profilContainer}>
           <View style={styles.profilContainer}>{imageDeProfil}</View>
         </Pressable>
             <View style={styles.welcome}>

@@ -12,17 +12,16 @@ import {
   Image,  
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login, collectData } from "../reducers/user";
+import { collectData } from "../reducers/user";
 import { useFonts } from "expo-font";
 
 
 
-const BACKEND_ADDRESS = "http://192.168.10.182";
+const BACKEND_ADDRESS = "http://192.168.10.140";
 
 export default function LoginScreen({ navigation }) {
-  // let [fontsLoaded] = useFonts({Montserrat_600Black});
 
   const dispatch = useDispatch();
 
@@ -78,7 +77,7 @@ export default function LoginScreen({ navigation }) {
         </View>
         <Text style={styles.contentText}>Votre application de gestion de crèche canine</Text>
       <View style={styles.containerInput}>
-        {/* <Text style={styles.field}>Votre adresse email</Text> */}
+
         <TextInput
           autoCapitalize="none"
           onChangeText={(value) => setEmail(value)}
@@ -90,7 +89,6 @@ export default function LoginScreen({ navigation }) {
         />
       </View>
       <View style={styles.containerInput}>
-        {/* <Text style={styles.field}>Votre mot de passe</Text> */}
         <TextInput
           autoCapitalize="none"
           autoCorrect={false}
@@ -105,7 +103,6 @@ export default function LoginScreen({ navigation }) {
         />
       </View>
       <View style={styles.containerInput}>
-        {/* <Text style={styles.field}>Votre code crèche</Text> */}
         <TextInput
           onChangeText={(value) => setCode_creche(value)}
           value={codeCreche}

@@ -7,7 +7,6 @@ import {
   TouchableOpacity, 
   View, 
   TextInput, 
-  Switch, 
   KeyboardAvoidingView,
   Pressable
 } from 'react-native';
@@ -20,7 +19,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 
 
-const BACKEND_ADDRESS = 'http://192.168.10.182';
+const BACKEND_ADDRESS = 'http://192.168.10.140';
 
 export default function DogProfile() {
 
@@ -30,10 +29,6 @@ export default function DogProfile() {
   const [editColor, setEditColor] = useState('white')
   const [checked, setChecked] = useState(false);
   
-
-  /*Check si le switch est actif ou non*/
-  // const [isEnabled, setIsEnabled] = useState(false);
-  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const user = useSelector((state) => state.user.value);
   
   const [dogInfos, setDogInfos] = useState([]);
@@ -219,21 +214,14 @@ useEffect(() => {
                 <Text style={styles.text}>Stérilisé(e):</Text>
                 <View style={styles.containerCheckbox}>
                   <BouncyCheckbox
-                    isChecked={dogInfos.Sterilisation}
-                    value={checked}
-                    // onPress={(boolean) => setChecked({...dogInfos, sterilisation: boolean})} 
+                    value={dogInfos.Sterilisation}
+                    onPress={(setChecked) => setDogInfos({...dogInfos, sterilisation : setChecked})} 
                     fillColor={"#008486"} 
                     unfillColor={"white"}
                     size={30}
                     innerIconStyle={styles.checkStyle}
                     disabled={!editView}/>
                 </View>
-                {/* <TextInput 
-                  style={editView ? styles.inputStyleEdit : styles.textInput}
-                  onChange={(Boolean) => setDogInfos({...dogInfos, Sterilisation: Boolean})}
-                  editable={editView} 
-                  value={dogInfos.Sterilisation}
-                /> */}
               </View>
               <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor}/>
             </Pressable>
@@ -296,21 +284,14 @@ useEffect(() => {
                 <Text style={styles.text}>Entente avec les chats:</Text>
                 <View style={styles.containerCheckbox}>
                   <BouncyCheckbox
-                    isChecked={dog.entente_chats}
-                    value={checked}
-                    // onPress={(boolean) => setChecked({...dogInfos, entente_chats: boolean})} 
+                   value={dogInfos.entente_chats}
+                   onPress={(setChecked) => setDogInfos({...dogInfos, entente_chats: setChecked})} 
                     fillColor={"#008486"} 
                     unfillColor={"white"}
                     size={30}
                     innerIconStyle={styles.checkStyle}
                     disabled={!editView}/>
                 </View>
-                {/* <TextInput 
-                  style={editView ? styles.inputStyleEdit : styles.textInput}
-                  onChangeText={(text) => setDogInfos({...dogInfos, entente_chats: text})}
-                  editable={editView} 
-                  value={dogInfos.entente_chats}
-                /> */}
               </View>
               <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
             </Pressable>
@@ -323,19 +304,13 @@ useEffect(() => {
                 <View style={styles.containerCheckbox}>
                   <BouncyCheckbox
                     value={dogInfos.entente_enfants}
-                    // onPress={(boolean) => setChecked({...dogInfos, sterilisation: boolean})} 
+                    onPress={(setChecked) => setDogInfos({...dogInfos, entente_enfants: setChecked})} 
                     fillColor={"#008486"} 
                     unfillColor={"white"}
                     size={30}
                     innerIconStyle={styles.checkStyle}
                     disabled={!editView}/>
                 </View>
-                {/* <TextInput 
-                  style={editView ? styles.inputStyleEdit : styles.textInput}
-                  onChangeText={(text) => setDogInfos({...dogInfos, entente_enfants: text})}
-                  editable={editView} 
-                  value={dogInfos.entente_enfants}
-                /> */}
               </View>
               <FontAwesomeIcon style={styles.icon} icon={faPenToSquare} color={editColor} onPress={() => handleModifier()}/>
             </Pressable>
@@ -453,7 +428,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   containerCheckbox: {
-    paddingRight:100,
+    position: "absolute",
+    left:250,
   },
   footer: {
     flex: 1,
@@ -529,7 +505,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
   },
   checkStyle : {
-    borderWidth: 1,
-    borderColor : "FFC547"
+    borderWidth: 0.5,
+    borderColor : "#FFC547",
   },
 })

@@ -14,10 +14,12 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from "react-native";
-const moment = require("moment");
-import SelectDropdown from "react-native-select-dropdown";
 
+import SelectDropdown from "react-native-select-dropdown";
 import { FontAwesome } from "@expo/vector-icons";
+const moment = require("moment");
+
+const BACKEND_ADDRESS = 'http://192.168.10.140';
 
 export default function BookingScreen() {
   const hours = [
@@ -93,7 +95,6 @@ export default function BookingScreen() {
     Bold: require("../assets/styles/Montserrat-Bold.ttf"),
   });
 
-  const ip = "192.168.10.182";
 
   const hoursA = [
     "09:00",
@@ -127,7 +128,7 @@ export default function BookingScreen() {
   const modifyAction = () => {
     if (newHeureDepose && newHeureRecuperation) {
       fetch(
-        `http://${ip}:3000/bookings/dataBooking/${userToken}/${selectedDate}`,
+        `${BACKEND_ADDRESS}:3000/bookings/dataBooking/${userToken}/${selectedDate}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -156,7 +157,7 @@ export default function BookingScreen() {
   };
   useEffect(() => {
     setTimeout(() => {
-      fetch(`http://${ip}:3000/bookings/allBookingPerUser/${userToken}`)
+      fetch(`${BACKEND_ADDRESS}:3000/bookings/allBookingPerUser/${userToken}`)
         .then((response) => response.json())
         .then((json) => {
           if (json) {
@@ -177,7 +178,7 @@ export default function BookingScreen() {
           setArrCalendarDate(arrayDateForCalendar);
         });
 
-      fetch(`http://${ip}:3000/bookings/allBookingDuplicate`)
+      fetch(`${BACKEND_ADDRESS}:3000/bookings/allBookingDuplicate`)
         .then((response) => response.json())
         .then((json) => {
           // console.log(json.data);
@@ -207,7 +208,7 @@ export default function BookingScreen() {
     console.log("duplicata", duplicateElement);
 
     for (let i = 0; i < duplicata.length; i++) {
-      fetch(`http://${ip}:3000/bookings/findUserTokenByDate/${duplicata[i]}`)
+      fetch(`${BACKEND_ADDRESS}:3000/bookings/findUserTokenByDate/${duplicata[i]}`)
         .then((response) => response.json())
         .then((json) => {
           if (json) {
@@ -234,7 +235,7 @@ export default function BookingScreen() {
     setDuplicata(duplicateElement);
 
     fetch(
-      `http://${ip}:3000/bookings/findUserTokenByDate/${duplicateElement[0]}`
+      `${BACKEND_ADDRESS}:3000/bookings/findUserTokenByDate/${duplicateElement[0]}`
     )
       .then((response) => response.json())
       .then((json) => {
@@ -252,7 +253,7 @@ export default function BookingScreen() {
     // console.log("idUSER", userToken);
 
     fetch(
-      `http://${ip}:3000/bookings/booking/info/${userToken}/${selectedDate}`
+      `${BACKEND_ADDRESS}:3000/bookings/booking/info/${userToken}/${selectedDate}`
     )
       .then((response) => response.json())
       .then((json) => {
@@ -297,7 +298,7 @@ export default function BookingScreen() {
   // console.log(arrayB);
 
   const actualiser = () => {
-    fetch(`http://${ip}:3000/bookings/allBookingPerUser/${userToken}`)
+    fetch(`${BACKEND_ADDRESS}:3000/bookings/allBookingPerUser/${userToken}`)
       .then((response) => response.json())
       .then((json) => {
         for (let i = 0; i < json.data.length; i++) {
@@ -353,12 +354,12 @@ export default function BookingScreen() {
       setModalVisible(!modalVisible);
       //count the number of booking
 
-      fetch(`http://${ip}:3000/bookings/count/${selectedDate}`)
+      fetch(`${BACKEND_ADDRESS}:3000/bookings/count/${selectedDate}`)
         .then((response) => response.json())
         .then((json) => {
           // console.log(json.data);
           if (json.data < 2) {
-            fetch(`http://${ip}:3000/bookings/add/${userToken}`, {
+            fetch(`${BACKEND_ADDRESS}:3000/bookings/add/${userToken}`, {
               method: "POST",
               headers: {
                 Accept: "application/json",
@@ -414,7 +415,7 @@ export default function BookingScreen() {
   const takeTheElements = () => {};
   const deleteResa = () => {
     fetch(
-      `http://` + ip + `:3000/bookings/delete/${userToken}/${selectedDate}`,
+      `${BACKEND_ADDRESS}` + `:3000/bookings/delete/${userToken}/${selectedDate}`,
       {
         method: "DELETE",
         headers: {
@@ -1437,7 +1438,7 @@ const styles = StyleSheet.create({
   },
 
   weekTitle: {
-    fontSize: 21,
+    fontSize: 22,
     fontWeight: "bold",
     fontFamily: "Bold",
   },
@@ -1464,14 +1465,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   scroll: {
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 1,
-    //   height: 4,
-    // },
-    // shadowOpacity: 0.32,
-    // shadowRadius: 5.46,
-    // elevation: 9,
     marginTop: 20,
     marginBottom: 0,
     flex: 1,
@@ -1587,19 +1580,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-//fomat json date
-/*
-    {
-      "date": "2022-12-10",
-      "nbrePlace": 3
-    },
-    {
-      "date": "2022-12-11",
-      "nbrePlace": 3
-    },
-    {
-      "date": "2022-12-12",
-      "nbrePlace": 3
-    },
-*/
